@@ -42,7 +42,6 @@ elif pilihan == 6:
     print ("Anda memilih Reservasi Kamar".center(60))
 
 elif pilihan == 7:
-    print ("Anda memilih logout".center(60))
     exit()
 
 else:
