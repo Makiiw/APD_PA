@@ -46,3 +46,5 @@ elif pilihan == 7:
 
 else:
     print ("Pilihan Tidak Valid. Masukkan Angka 1-7.".center(60))
+
+# Part 1
