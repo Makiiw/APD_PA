@@ -3,7 +3,8 @@ import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
-from autentikasi import login, register
+from autentikasi import admin,user, register
+# from admin import menu_admin
 from colorama import Fore
 
 os.system("cls")
@@ -26,38 +27,32 @@ def menu_utama():
         ).execute()
         print (baris)
 
-        if pilihan == "1":
-                    nama = input("Masukkan Username: ").strip()
-                    sandi = input("Masukkan Password: ").strip()
-                    try:
-                        akun = admin(nama, sandi)   
-                        print(f"Login berhasil! Selamat datang, {akun[2]}!")
-                    except ValueError as e:
+        if pilihan == 1:
+            nama = input("Masukkan Username: ").strip()
+            sandi = input("Masukkan Password: ").strip()
+            try:
+                akun = admin(nama, sandi)   
+                print(f"Login berhasil! Selamat datang, {akun[2]}!")
+                # menu_admin()
+            except ValueError as e:
                         print(e)
 
-            elif pilihan == "2":
-                    nama = input("Masukkan Username: ").strip()
-                    sandi = input("Masukkan Password: ").strip()
-                    try:
-                        akun = user(nama, sandi)
-                        print(f"Login berhasil! Selamat datang, {akun[2]}!")
-                    except ValueError as e:
-                        print(e)
+        elif pilihan == 2:
+            nama = input("Masukkan Username: ").strip()
+            sandi = input("Masukkan Password: ").strip()
+            try:
+                akun = user(nama, sandi)
+                print(f"Login berhasil! Selamat datang, {akun[2]}!")
+            except ValueError as e:
+                print(e)
 
-            elif pilihan == "3":
-                    print("Terima kasih telah menggunakan program ini. Sampai jumpa!")
-                    break
+        elif pilihan == "3":
+            print("Terima kasih telah menggunakan program ini. Sampai jumpa!")
+            break
+        elif pilihan == 4:
+            exit()
 
-            else:
-                print("Pilihan tidak valid. Silakan coba lagi.")
+        else:
+            print("Pilihan tidak valid. Silakan coba lagi.")
                 
-
-                elif pilihan == 3:
-                    print ("Silahkan Registrasi Akun".center(60))
-                    register()
-
-
-                elif pilihan == 4:
-                    exit()
-
 menu_utama()
