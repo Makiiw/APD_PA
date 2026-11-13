@@ -22,20 +22,17 @@ pilihan = inquirer.select(
 print (baris)
 
 if pilihan == 1:
-    while True:
         print ("Anda memilih login sebagai Admin".center(60))
         username = input("Masukan username: ")
         password = input("Masukan password: ")
     
 elif pilihan == 2:
-    while True:
-        print ("Anda memilih login sebagai Pengguna".center(60))
-        username = input("Masukan username: ")
-        password = input("Masukan password: ")
+    print ("Anda memilih login sebagai Pengguna".center(60))
+    username = input("Masukan username: ")
+    password = input("Masukan password: ")
 
 elif pilihan == 3:
-    while True:
-        print ("Silahkan Registrasi Akun".center(60))
+    print ("Silahkan Registrasi Akun".center(60))
 
 
 elif pilihan == 4:
