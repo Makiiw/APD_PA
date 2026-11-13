@@ -68,3 +68,4 @@ def register():
         data.user.append([username_baru, password_baru, "user"])
         print("Register berhasil!")
 
+
