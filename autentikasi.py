@@ -1,7 +1,10 @@
+import os
 import data
 import pwinput
 
+
 def admin(nama, sandi):
+    os.system("cls")
     user_ada = False
     pass_ada = False
     for akun in data.admin:
@@ -24,6 +27,7 @@ def admin(nama, sandi):
     raise ValueError("Password salah!")
 
 def user(nama, sandi):
+    os.system("cls")
     user_ada = False
     pass_ada = False
     for akun in data.user:
@@ -46,26 +50,28 @@ def user(nama, sandi):
     raise ValueError("Password salah!")
 
 def register():
-    username_baru = input("Masukkan Username baru   : ").strip()
-    password_baru = pwinput.pwinput("Masukkan Password baru   : ").strip()
-    user_ada = False
-    for akun in data.user:
-        if akun[0] == username_baru:
-            user_ada = True
-            break
-    try:
-        if username_baru == "" and password_baru == "":
-            raise ValueError("Username dan Password tidak boleh kosong!")
-        elif username_baru == "":
-            raise ValueError("Username tidak boleh kosong!")
-        elif password_baru == "":
-            raise ValueError("Password tidak boleh kosong!")
-        elif user_ada:
-            raise ValueError("Username sudah digunakan, Silahkan gunakan username lain!")
-    except ValueError as e:
-        print(e)
-    else:
-        data.user.append([username_baru, password_baru, "user"])
-        print("Register berhasil!")
-
-
+        while True:
+            os.system("cls")
+            username_baru = input("Masukkan Username baru   : ").strip()
+            password_baru = pwinput.pwinput("Masukkan Password baru   : ").strip()
+            user_ada = False
+            for akun in data.user:
+                if akun[0] == username_baru:
+                    user_ada = True
+                    
+                if  username_baru == "" and password_baru == "":
+                    input("Username dan Password tidak boleh kosong!")
+                    True
+                elif  username_baru == "":
+                    input("Username tidak boleh kosong!")
+                    True
+                elif  password_baru == "":
+                    input("Password tidak boleh kosong!")
+                    True
+                elif  user_ada:
+                    input("Username sudah digunakan, Silahkan gunakan username lain!")
+                    True
+                else:
+                    data.user.append([username_baru, password_baru, "user"])
+                    print("Register berhasil!")
+                    return

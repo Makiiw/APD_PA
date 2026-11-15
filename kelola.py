@@ -18,19 +18,21 @@ def tampilan_kelola_kamar():
                    Separator(baris)
                   ]
     ).execute()
-    
-    if pilihan == 1:
-        tambah_kamar()
 
-def tambah_kamar():
-    os.system("cls")
-    print (baris)
-    print ("TAMBAH KAMAR".center(60))
-    print (baris)
-    nomor_kamar = input ("Nomor Kamar: ").upper()
-    tipe_kamar = input ("Tipe Kamar: ").upper()
-    fasilitas_kamar = input ("Fasilitas: ").upper()
-    harga_kamar = input ("Harga per malam: ").upper()
-    status_kamar = input ("Status :").upper().upper()
+    def tambah_kamar():
+        os.system("cls")
+        print (baris)
+        print ("TAMBAH KAMAR".center(60))
+        print (baris)
+        nomor_kamar = input ("Nomor Kamar: ").upper()
+        tipe_kamar = input ("Tipe Kamar: ").upper()
+        fasilitas_kamar = input ("Fasilitas: ").upper()
+        harga_kamar = input ("Harga per malam: ").upper()
+        status_kamar = input ("Status :").upper().upper()
+        
+        if pilihan == 1:
+            tambah_kamar()
+
+
 
 tampilan_kelola_kamar()

@@ -5,7 +5,6 @@ from InquirerPy.separator import Separator
 baris = ("=" * 60)
 
 def menu_admin():
-    while True:
         print (baris)
         print ("SELAMAT DATANG DI MENU ADMIN")
         print (baris)
@@ -21,24 +20,25 @@ def menu_admin():
                       Separator(baris)
                       ]
         ).execute()
-        if pilihan == 1:
-            print (baris)
-            print ("Kelola Data Kamar")
-        elif pilihan == 2:
-            print (baris)
-            print ("Kelola Data Tamu")
-        elif pilihan == 3:
-            print (baris)
-            print ("Kelola Reservasi")
-        elif pilihan == 4:
-            print (baris)
-            print ("Kelola Pembayaran")
-        elif pilihan == 5:
-            print (baris)
-            print ("Rekaputulasi")
-        elif pilihan == 6:
-            print ("Kelola Pengumuman")
-        elif pilihan == 7:
-            print ("")
+        os.system("cls")
 
-menu_admin()
+        if pilihan == 1:
+                print (baris)
+                print ("Kelola Data Kamar")
+        elif pilihan == 2:
+                print (baris)
+                print ("Kelola Data Tamu")
+        elif pilihan == 3:
+                print (baris)
+                print ("Kelola Reservasi")
+        elif pilihan == 4:
+                print (baris)
+                print ("Kelola Pembayaran")
+        elif pilihan == 5:
+                print (baris)
+                print ("Rekaputulasi")
+        elif pilihan == 6:
+                print ("Kelola Pengumuman")
+        elif pilihan == 7:
+                return
+        
