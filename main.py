@@ -8,26 +8,27 @@ from colorama import Fore
 from menu_user import menu_user
 
 
-while True:
-    os.system("cls")
-    baris = ("=" * 60)
-    print (baris)
-    print ("HotelManage - Reservasi Hotel".center(60))
-    print (baris)
-    def menu_utama():
-            pilihan = inquirer.select(
-                message= "PILIHAN MENU: ",
-                choices=[
-                        Choice(value=1, name="- Admin"),
-                        Choice(value=2, name="- Pengguna"),
-                        Choice(value=3, name="- Registrasi"),
-                        Choice(value=4, name ="- Exit"),
-                        Separator(baris),
-                    ],
-            ).execute()
-            print (baris)
 
-            if pilihan == 1:
+def menu_utama():
+    while True:
+        os.system("cls")
+        baris = ("=" * 60)
+        print (baris)
+        print ("HotelManage - Reservasi Hotel".center(60))
+        print (baris)
+        pilihan = inquirer.select(
+            message= "PILIHAN MENU: ",
+            choices=[
+                    Choice(value=1, name="- Admin"),
+                    Choice(value=2, name="- Pengguna"),
+                    Choice(value=3, name="- Registrasi"),
+                    Choice(value=4, name ="- Exit"),
+                    Separator(baris),
+                    ],
+        ).execute()
+        print (baris)
+        
+        if pilihan == 1:
                 os.system("cls")
                 nama = input("Masukkan Username: ").strip()
                 sandi = input("Masukkan Password: ").strip()
@@ -37,8 +38,8 @@ while True:
                     menu_admin()
                 except ValueError as e:
                     input(str(e) + "\nTekan Enter untuk melanjutkan...")
-
-            elif pilihan == 2:
+                    
+        elif pilihan == 2:
                 os.system("cls")
                 nama = input("Masukkan Username: ").strip()
                 sandi = input("Masukkan Password: ").strip()
@@ -48,19 +49,20 @@ while True:
                     menu_user()
                 except ValueError as e:
                     input(str(e) + "\nTekan Enter untuk melanjutkan...")
-
-            elif pilihan == 3:
+                    
+        elif pilihan == 3:
                 os.system("cls")
                 try:
                     register()
                 except ValueError as e:
                     input(str(e) + "\nTekan Enter untuk melanjutkan...")
                     menu_utama()
-
-            elif pilihan == 4:
-                exit()
-
-            else:
-                print("Pilihan tidak valid. Silakan coba lagi.")
                     
+        elif pilihan == 4:
+                exit()
+        else:
+                print("Pilihan tidak valid. Silakan coba lagi.")
+                        
+
+if __name__ == "__main__":
     menu_utama()

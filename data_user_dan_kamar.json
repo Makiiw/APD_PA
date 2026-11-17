@@ -91,7 +91,29 @@
             "test",
             "test",
             "User"
+        ],
+        [
+            "tset",
+            "tset",
+            "User"
+        ],
+        [
+            "anjing",
+            "anjing123",
+            "User"
+        ],
+        [
+            "babi",
+            "babi123",
+            "User"
         ]
     ],
-    "data_kamar": {}
+    "data_kamar": {
+        "103": {
+            "tipe": "PREMIUM",
+            "fasilitas": "ASU",
+            "harga": 200000,
+            "status": "TERSEDIA"
+        }
+    }
 }
