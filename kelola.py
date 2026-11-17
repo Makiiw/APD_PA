@@ -3,30 +3,36 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from data import data_kamar
-from tabulate import tabulate
+from rich.console import Console
+from rich.table import Table
 
 baris = ("=" * 60)
 
 def tampilan_kelola_kamar():
-    os.system("cls")
-    print (baris)
-    pilihan = inquirer.select(
-        message= "PILIHAN KELOLA KAMAR: ",
-        choices = [
-                   Choice(value= 1, name="Tambah Kamar"),
-                   Choice(value=2, name="Tampil Data Kamar"),
-                   Choice(value=3, name="Ubah Data Kamar"),
-                   Choice(value=4, name="Hapus Data Kamar"),
-                   Choice(value=5, name="Kembali Ke Menu Admin"),
-                   Separator(baris)
-                  ]
-    ).execute()
-    if pilihan == 1:
+    while True:
         os.system("cls")
-        tambah_kamar()
-    elif pilihan == 2:
-        os.system("cls")
-        tampilkan_kamar()
+        print (baris)
+        pilihan = inquirer.select(
+            message= "PILIHAN KELOLA KAMAR: ",
+            choices = [
+                    Choice(value= 1, name="Tambah Kamar"),
+                    Choice(value=2, name="Tampil Data Kamar"),
+                    Choice(value=3, name="Ubah Data Kamar"),
+                    Choice(value=4, name="Hapus Data Kamar"),
+                    Choice(value=5, name="Kembali Ke Menu Admin"),
+                    Separator(baris)
+                    ]
+        ).execute()
+        if pilihan == 1:
+            tambah_kamar()
+        elif pilihan == 2:
+            tampilkan_kamar()
+        elif pilihan == 3:
+            ubah_kamar()
+        elif pilihan == 4:
+            hapus_kamar()
+        elif pilihan == 5:
+            break     
 
 def tambah_kamar():
     os.system("cls")
@@ -69,6 +75,8 @@ def tambah_kamar():
     finally:
         input("\nTekan Enter untuk kembali...")
 
+console = Console()
+
 def tampilkan_kamar():
     os.system("cls")
     print(baris)
@@ -78,21 +86,85 @@ def tampilkan_kamar():
         if not data_kamar:
             raise LookupError("Data kamar masih kosong.")
         
-        tabel = []
+        tabel = Table(title="Data Kamar Hotel", show_lines=True)
+        tabel.add_column("No", justify="center")
+        tabel.add_column("No. Kamar", justify="center")
+        tabel.add_column("Tipe")
+        tabel.add_column("Fasilitas")
+        tabel.add_column("Harga/Malam", justify="right")
+        tabel.add_column("Status", justify="center")
+        
         for no, (nomor, info) in enumerate(data_kamar.items(), start=1):
             harga = f"Rp {info['harga']:,}".replace(",", ".")
-            tabel.append([no, nomor, info["tipe"], info["fasilitas"], harga, info["status"]])
+            tabel.add_row(str(no), nomor, info["tipe"], info["fasilitas"], harga, info["status"])
             
-        header = ["No", "No. Kamar", "Tipe", "Fasilitas", "Harga/Malam", "Status"]
-        print(tabulate(tabel, headers=header, tablefmt="grid"))
-        print(f"\nTotal kamar: {len(data_kamar)}")
+        console.print(tabel)
+        console.print(f"\nTotal kamar: {len(data_kamar)}")
         
     except LookupError as e:
-        print(f"\n>> {e}")
+        console.print(f"\n>> {e}")
     except KeyError as e:
-        print(f"\n>> Data kamar tidak lengkap, kolom {e} tidak ditemukan.")
+        console.print(f"\n>> Data kamar tidak lengkap, kolom {e} tidak ditemukan.")
     except Exception as e:
-        print(f"\n>> Terjadi kesalahan tak terduga: {e}")
+        console.print(f"\n>> Terjadi kesalahan tak terduga: {e}")
     finally:
         input("\nTekan Enter untuk kembali...")
 
+def ubah_kamar():
+    os.system("cls")
+    print(baris)
+    print("UBAH DATA KAMAR".center(60))
+    print(baris)
+    try:
+        nomor = input("Masukkan nomor kamar yang diubah: ").strip().upper()
+        kamar = data_kamar[nomor] 
+        
+        print("\nKosongkan jika tidak diubah")
+        tipe = input(f"Tipe [{kamar['tipe']}]: ").strip().upper()
+        fasilitas = input(f"Fasilitas [{kamar['fasilitas']}]: ").strip().upper()
+        harga = input(f"Harga [{kamar['harga']}]: ").strip()
+        status = input(f"Status [{kamar['status']}]: ").strip().upper()
+        
+        kamar["tipe"] = tipe or kamar["tipe"]
+        kamar["fasilitas"] = fasilitas or kamar["fasilitas"]
+        kamar["harga"] = int(harga) if harga else kamar["harga"]
+        kamar["status"] = status or kamar["status"]
+        
+        print("\n>> Data kamar berhasil diubah!")
+        
+    except KeyError:
+        print("\n>> Nomor kamar tidak ditemukan.")
+    except ValueError:
+        print("\n>> Harga harus berupa angka.")
+    finally:
+        input("\nTekan Enter untuk kembali...")
+
+def hapus_kamar():
+    os.system("cls")
+    print(baris)
+    print("HAPUS DATA KAMAR".center(60))
+    print(baris)
+    try:
+        nomor = input("Masukkan nomor kamar yang dihapus: ").strip().upper()
+        kamar = data_kamar[nomor]
+        if kamar["status"] == "TERISI":
+            raise PermissionError("Kamar masih terisi, tidak dapat dihapus.")
+        
+        print(f"\nTipe      : {kamar['tipe']}")
+        print(f"Fasilitas : {kamar['fasilitas']}")
+        print(f"Harga     : {kamar['harga']}")
+        print(f"Status    : {kamar['status']}")
+        
+        konfirmasi = input("\nYakin ingin menghapus? (y/n): ").strip().lower()
+        if konfirmasi == "y":
+            del data_kamar[nomor]
+            print("\n>> Data kamar berhasil dihapus!")
+        else:
+            print("\n>> Penghapusan dibatalkan.")
+            
+    except KeyError:
+        print("\n>> Nomor kamar tidak ditemukan.")
+    except PermissionError as e:
+        print(f"\n>> Gagal! {e}")
+    finally:
+        input("\nTekan Enter untuk kembali...")
