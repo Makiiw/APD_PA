@@ -1,4 +1,13 @@
-admin = [["admin", "admin123", "Admin", ]]
-user = [["user", "user123", "User", ]]
+import json
+FILE = "data_user_dan_kamar.json"
 
-data_kamar = {}
+with open(FILE, "r") as f:
+    data = json.load(f)
+
+admin = data["admin"]
+user = data["user"]
+data_kamar = data["data_kamar"]
+
+def simpan():
+    with open(FILE, "w") as f:
+        json.dump(data, f, indent=4)

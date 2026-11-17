@@ -36,7 +36,7 @@ def user(nama, sandi):
         if akun[1] == sandi:
             pass_ada = True
         if akun[0] == nama and akun[1] == sandi:
-            return akun
+            return
     if nama == "" and sandi =="":
         raise ValueError("Username dan Password tidak boleh kosong!")
     elif nama == "":
@@ -50,28 +50,12 @@ def user(nama, sandi):
     raise ValueError("Password salah!")
 
 def register():
-        while True:
-            os.system("cls")
-            username_baru = input("Masukkan Username baru   : ").strip()
-            password_baru = pwinput.pwinput("Masukkan Password baru   : ").strip()
-            user_ada = False
-            for akun in data.user:
-                if akun[0] == username_baru:
-                    user_ada = True
-                    
-                if  username_baru == "" and password_baru == "":
-                    input("Username dan Password tidak boleh kosong!")
-                    True
-                elif  username_baru == "":
-                    input("Username tidak boleh kosong!")
-                    True
-                elif  password_baru == "":
-                    input("Password tidak boleh kosong!")
-                    True
-                elif  user_ada:
-                    input("Username sudah digunakan, Silahkan gunakan username lain!")
-                    True
-                else:
-                    data.user.append([username_baru, password_baru, "user"])
-                    print("Register berhasil!")
-                    return
+    os.system("cls")
+    username_baru = input("Masukkan Username Baru: ").strip()
+    password_baru = pwinput.pwinput("Masukkan Password Baru: ").strip()
+    for akun in data.admin + data.user:
+        if akun[0] == username_baru:
+            raise ValueError("Username sudah digunakan, Silahkan gunakan username lain!")
+    data.user.append([username_baru, password_baru, "User"])
+    data.simpan()
+    print("Register berhasil!")

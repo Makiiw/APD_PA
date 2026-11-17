@@ -1,4 +1,3 @@
-
 import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
@@ -37,7 +36,7 @@ while True:
                     print(f"Login berhasil! Selamat datang".center(60))
                     menu_admin()
                 except ValueError as e:
-                            print(e)
+                    input(str(e) + "\nTekan Enter untuk melanjutkan...")
 
             elif pilihan == 2:
                 os.system("cls")
@@ -45,14 +44,17 @@ while True:
                 sandi = input("Masukkan Password: ").strip()
                 try:
                     akun = user(nama, sandi)
-                    print(f"Login berhasil! Selamat datang".center(60))
+                    print("Login berhasil".center(60))
                     menu_user()
                 except ValueError as e:
-                    print(e)
+                    input(str(e) + "\nTekan Enter untuk melanjutkan...")
 
             elif pilihan == 3:
-                    os.system("cls")
+                os.system("cls")
+                try:
                     register()
+                except ValueError as e:
+                    input(str(e) + "\nTekan Enter untuk melanjutkan...")
                     menu_utama()
 
             elif pilihan == 4:
