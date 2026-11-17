@@ -44,9 +44,9 @@ def menu_utama():
                 nama = input("Masukkan Username: ").strip()
                 sandi = input("Masukkan Password: ").strip()
                 try:
-                    akun = user(nama, sandi)
+                    username = user(nama, sandi)
                     print("Login berhasil".center(60))
-                    menu_user()
+                    menu_user(username)
                 except ValueError as e:
                     input(str(e) + "\nTekan Enter untuk melanjutkan...")
                     

@@ -113,7 +113,7 @@
             "tipe": "PREMIUM",
             "fasilitas": "ASU",
             "harga": 200000,
-            "status": "TERSEDIA"
+            "status": "TERISI"
         }
     },
     "data_tamu": {
@@ -134,5 +134,18 @@
             "NO. HP": 1231,
             "Alamat": "fserf"
         }
-    }
+    },
+    "data_reservasi": {
+        "RSV-001": {
+            "username": "user",
+            "kamar": "103",
+            "checkin": "28-09-2008",
+            "checkout": "10-10-2008",
+            "malam": 12,
+            "total": 2400000,
+            "status": "MENUNGGU KONFIRMASI",
+            "pembayaran": "BELUM LUNAS"
+        }
+    },
+    "data_pengumuman": []
 }
