@@ -7,7 +7,9 @@ with open(FILE, "r") as f:
 admin = data["admin"]
 user = data["user"]
 data_kamar = data["data_kamar"]
+data_tamu = data["data_tamu"]
 
 def simpan():
     with open(FILE, "w") as f:
         json.dump(data, f, indent=4)
+        
