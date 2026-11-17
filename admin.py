@@ -6,7 +6,7 @@ baris = ("=" * 60)
 
 def menu_admin():
         print (baris)
-        print ("SELAMAT DATANG DI MENU ADMIN")
+        print ("SELAMAT DATANG DI MENU ADMIN".center(60))
         print (baris)
         pilihan = inquirer.select(
             message= "PILIHAN YANG TERSEDIA: ",

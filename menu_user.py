@@ -44,7 +44,7 @@ def menu_user():
         print ("Anda memilih Reservasi Kamar".center(60))
 
     elif pilihan == 7:
-        exit()
+        return
 
     else:
         print ("Pilihan Tidak Valid. Masukkan Angka 1-7.".center(60))
