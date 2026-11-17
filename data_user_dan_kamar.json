@@ -115,5 +115,24 @@
             "harga": 200000,
             "status": "TERSEDIA"
         }
+    },
+    "data_tamu": {
+        "id_tamu": {
+            "nama_tamu": "PREMIUM",
+            "no_hp": "ASU",
+            "alamat": 200000
+        },
+        "11": {
+            "ID TAMU": "11",
+            "Nama": "FALIY",
+            "NO. HP": 123412,
+            "Alamat": "aehkhfa"
+        },
+        "1": {
+            "ID TAMU": "1",
+            "Nama": "DWA",
+            "NO. HP": 1231,
+            "Alamat": "fserf"
+        }
     }
 }
