@@ -36,7 +36,7 @@ def user(nama, sandi):
         if akun[1] == sandi:
             pass_ada = True
         if akun[0] == nama and akun[1] == sandi:
-            return
+            return nama
     if nama == "" and sandi =="":
         raise ValueError("Username dan Password tidak boleh kosong!")
     elif nama == "":

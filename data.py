@@ -8,6 +8,8 @@ admin = data["admin"]
 user = data["user"]
 data_kamar = data["data_kamar"]
 data_tamu = data["data_tamu"]
+data_reservasi = data["data_reservasi"]
+data_pengumuman = data["data_pengumuman"]
 
 def simpan():
     with open(FILE, "w") as f:
