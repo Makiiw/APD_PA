@@ -38,7 +38,7 @@ def tambah_tamu():
     while True:
         os.system("cls")
         print(baris)
-        print("TAMBAH KAMAR".center(60))
+        print("TAMBAH TAMU".center(60))
         print(baris)
         try:
             id_tamu = input("Masukan Id Tamu: ").strip().upper()
@@ -161,4 +161,3 @@ def hapus_tamu():
         print("\n>> ID tamu tidak ditemukan.")
     finally:
         input("\nTekan Enter untuk kembali...")
-tampilan_kelola_tamu()
