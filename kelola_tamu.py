@@ -15,6 +15,7 @@ def tampilan_kelola_tamu():
         os.system("cls")
         print(baris)
         pilihan = inquirer.select(
+<<<<<<< HEAD
             message="PILIHAN KELOLA TAMU: ",
             choices=[
                 Choice(value=1, name="Tambah Tamu"),
@@ -24,6 +25,17 @@ def tampilan_kelola_tamu():
                 Choice(value=5, name="Kembali Ke Menu Admin"),
                 Separator(baris),
             ],
+=======
+            message= "PILIHAN KELOLA KAMAR: ",
+            choices = [
+                    Choice(value= 1, name="Tambah Data Tamu"),
+                    Choice(value=2, name="Tampil Data Tamu"),
+                    Choice(value=3, name="Ubah Data Tamu"),
+                    Choice(value=4, name="Hapus Data Tamu"),
+                    Choice(value=5, name="Kembali Ke Menu Admin"),
+                    Separator(baris)
+                    ]
+>>>>>>> 85dd5c940c4833ec2cf5c3fa1d828ceecb5ed424
         ).execute()
         if pilihan == 1:
             tambah_tamu()
@@ -92,10 +104,18 @@ def tampilkan_tamu():
         tabel.add_column("Alamat")
 
         for no, (id_tamu, info) in enumerate(data_tamu.items(), start=1):
+<<<<<<< HEAD
             tabel.add_row(str(no), id_tamu, info["nama"], str(info["hp"]), info["alamat"])
 
         console.print(tabel)
         console.print(f"\nTotal tamu: {len(data_tamu)}")
+=======
+            tabel.add_row(str(no), id_tamu, info["Nama"], str(info["NO. HP"]), info["Alamat"])
+
+        console.print(tabel)
+        console.print(f"\nTotal tamu: {len(data_tamu)}")
+
+>>>>>>> 85dd5c940c4833ec2cf5c3fa1d828ceecb5ed424
     except LookupError as e:
         console.print(f"\n>> {e}")
     except KeyError as e:
@@ -113,6 +133,7 @@ def ubah_tamu():
     print(baris)
     try:
         id_tamu = input("Masukkan ID tamu yang diubah: ").strip().upper()
+<<<<<<< HEAD
         tamu = data_tamu[id_tamu]
 
         print("\nKosongkan jika tidak diubah")
@@ -128,6 +149,27 @@ def ubah_tamu():
         tamu["alamat"] = alamat or tamu["alamat"]
         simpan()
         print("\n>> Data tamu berhasil diubah!")
+=======
+        tamu = data_tamu[id_tamu]  # KeyError jika ID tidak ada
+
+        print("\nKosongkan jika tidak diubah")
+        nama = input(f"Nama [{tamu['Nama']}]: ").strip().upper()
+        hp = input(f"No. HP [{tamu['NO. HP']}]: ").strip()
+        alamat = input(f"Alamat [{tamu['Alamat']}]: ").strip().upper()
+
+        # validasi dulu, jika salah belum ada data yang berubah
+        hp_baru = int(hp) if hp else tamu["NO. HP"]
+        if hp_baru <= 0:
+            raise ValueError
+
+        tamu["Nama"] = nama or tamu["Nama"]
+        tamu["NO. HP"] = hp_baru
+        tamu["Alamat"] = alamat or tamu["Alamat"]
+        simpan()
+
+        print("\n>> Data tamu berhasil diubah!")
+
+>>>>>>> 85dd5c940c4833ec2cf5c3fa1d828ceecb5ed424
     except KeyError:
         print("\n>> ID tamu tidak ditemukan.")
     except ValueError:
@@ -143,11 +185,19 @@ def hapus_tamu():
     print(baris)
     try:
         id_tamu = input("Masukkan ID tamu yang dihapus: ").strip().upper()
+<<<<<<< HEAD
         tamu = data_tamu[id_tamu]
 
         print(f"\nNama   : {tamu['nama']}")
         print(f"No. HP : {tamu['hp']}")
         print(f"Alamat : {tamu['alamat']}")
+=======
+        tamu = data_tamu[id_tamu]  # KeyError jika ID tidak ada
+
+        print(f"\nNama   : {tamu['Nama']}")
+        print(f"No. HP : {tamu['NO. HP']}")
+        print(f"Alamat : {tamu['Alamat']}")
+>>>>>>> 85dd5c940c4833ec2cf5c3fa1d828ceecb5ed424
 
         konfirmasi = input("\nYakin ingin menghapus? (y/n): ").strip().lower()
         if konfirmasi == "y":
