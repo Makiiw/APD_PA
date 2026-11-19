@@ -3,6 +3,7 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from kelola import tampilan_kelola_kamar, tambah_kamar, tampilkan_kamar
+from kelola_tamu import tampilan_kelola_tamu
 baris = ("=" * 60)
 
 
@@ -28,8 +29,7 @@ def menu_admin():
                 if pilihan == 1:
                         tampilan_kelola_kamar()
                 elif pilihan == 2:
-                        print (baris)
-                        print ("Kelola Data Tamu")
+                        tampilan_kelola_tamu()
                 elif pilihan == 3:
                         print (baris)
                         print ("Kelola Reservasi")
