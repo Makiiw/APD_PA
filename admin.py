@@ -30,6 +30,7 @@ def menu_admin():
                         tampilan_kelola_kamar()
                 elif pilihan == 2:
                         tampilan_kelola_tamu()
+                        break
                 elif pilihan == 3:
                         print (baris)
                         print ("Kelola Reservasi")
