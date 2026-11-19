@@ -109,12 +109,19 @@
         ]
     ],
     "data_kamar": {
-        "103": {
-            "tipe": "PREMIUM",
-            "fasilitas": "ASU",
-            "harga": 200000,
-            "status": "TERISI"
-        }
+        "101": {"tipe": "STANDARD", "fasilitas": "AC, TV, WIFI", "harga": 250000, "status": "TERSEDIA"},
+        "102": {"tipe": "STANDARD", "fasilitas": "AC, TV, WIFI", "harga": 250000, "status": "TERSEDIA"},
+        "103": {"tipe": "PREMIUM", "fasilitas": "AC, TV, WIFI, KULKAS", "harga": 400000, "status": "TERSEDIA"},
+        "104": {"tipe": "STANDARD", "fasilitas": "AC, TV, WIFI", "harga": 250000, "status": "DIPESAN"},
+        "105": {"tipe": "PREMIUM", "fasilitas": "AC, TV, WIFI, KULKAS", "harga": 400000, "status": "TERISI"},
+        "201": {"tipe": "DELUXE", "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB", "harga": 600000, "status": "TERSEDIA"},
+        "202": {"tipe": "DELUXE", "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB", "harga": 600000, "status": "TERISI"},
+        "203": {"tipe": "DELUXE", "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB", "harga": 600000, "status": "TERSEDIA"},
+        "204": {"tipe": "FAMILY", "fasilitas": "AC, TV, WIFI, KULKAS, 2 KASUR", "harga": 750000, "status": "DIPESAN"},
+        "205": {"tipe": "FAMILY", "fasilitas": "AC, TV, WIFI, KULKAS, 2 KASUR", "harga": 750000, "status": "TERSEDIA"},
+        "301": {"tipe": "SUITE", "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB, RUANG TAMU", "harga": 1000000, "status": "TERSEDIA"},
+        "302": {"tipe": "SUITE", "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB, RUANG TAMU", "harga": 1000000, "status": "PERBAIKAN"},
+        "303": {"tipe": "PRESIDENTIAL", "fasilitas": "AC, SMART TV, WIFI, MINIBAR, JACUZZI, BALKON", "harga": 2000000, "status": "TERSEDIA"}
     },
     "data_tamu": {
         "id_tamu": {
