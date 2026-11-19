@@ -34,7 +34,7 @@ def tampilan_kelola_tamu():
 def tambah_tamu():
         os.system("cls")
         print(baris)
-        print("TAMBAH KAMAR".center(60))
+        print("TAMBAH TAMU".center(60))
         print(baris)
         try:
             id_tamu = input("Masukan Id Tamu: ").strip().upper()
@@ -145,6 +145,20 @@ def hapus_tamu():
             print(f"No. HP : {tamu['hp']}")
             print(f"Alamat : {tamu['alamat']}")
 
+<<<<<<< HEAD
+        konfirmasi = input("\nYakin ingin menghapus? (y/n): ").strip().lower()
+        if konfirmasi == "y":
+            del data_tamu[id_tamu]
+            simpan()
+            print("\n>> Data tamu berhasil dihapus!")
+        else:
+            print("\n>> Penghapusan dibatalkan.")
+
+    except KeyError:
+        print("\n>> ID tamu tidak ditemukan.")
+    finally:
+        input("\nTekan Enter untuk kembali...")
+=======
             konfirmasi = input("\nYakin ingin menghapus? (y/n): ").strip().lower()
             if konfirmasi == "y":
                 del data_tamu[id_tamu]
@@ -154,3 +168,4 @@ def hapus_tamu():
                 print("\n>> Penghapusan dibatalkan.")
         except KeyError:
             print("\n>> ID tamu tidak ditemukan.")
+>>>>>>> origin/main
