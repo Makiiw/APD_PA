@@ -196,8 +196,8 @@ def ubah_profil(username):
     try:
         print("\nKosongkan jika tidak diubah")
         user_baru = input("Username baru        : ").strip()
-        pass_lama = getpass("Password lama        : ")
-        pass_baru = getpass("Password baru        : ")
+        pass_lama = input("Password lama        : ")
+        pass_baru = input("Password baru        : ")
 
         # akun di JSON berbentuk list: [username, password, "User"]
         akun = next((a for a in user if a[0] == username), None)
