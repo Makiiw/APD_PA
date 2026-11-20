@@ -30,26 +30,19 @@ def menu_user(username):
         print (baris)
 
         if pilihan == 1:
-            # print ("Informasi Dan Fasilitas Kamar".center(60))
             user.tampilkan_kamar()
         elif pilihan == 2:
-            # print ("Ketersediaan Kamar".center(60))
             user.kamar_tersedia()
         elif pilihan == 3:
-            # print ("Detail Dan Status Reservasi".center(60))
             user.reservasi_saya(username)
         elif pilihan == 4:
-            # print ("Informasi Dan Riwayat Pembayaran".center(60))
             user.riwayat_pembayaran(username)
         elif pilihan == 5:
-            # print ("Pengumuman Hotel".center(60))
-            user.pengumuman_hotel()
+           user.pengumuman_hotel()
         elif pilihan == 6:
-            # print ("Reservasi Kamar".center(60))
-            user.reservasi_kamar(username)
+          user.reservasi_kamar(username)
         elif pilihan == 7:
-            # print ("Ubah Data Diri".center(60))
-            user.ubah_profil(username)
+         user.ubah_profil(username)
         elif pilihan == 8:
             return
         else:

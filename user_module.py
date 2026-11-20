@@ -13,47 +13,59 @@ def buat_kode_reservasi():
     return f"RSV-{len(data_reservasi) + 1:03d}"
 
 console = Console()
-def tampilkan_kamar():
+
+def reset():
     os.system("cls" if os.name == "nt" else "clear")
+
+
+def tampilkan_kamar():
+    reset()
     print(baris)
     print("DAFTAR KAMAR".center(60))
     print(baris)
     try:
         if not data_kamar:
-            raise LookupError("Informasi Kamar Tidak Tersedia.")
-
-        tabel = table_util("Data Kamar Hotel")
-        tabel.add_column("No", justify="center")
-        tabel.add_column("No. Kamar", justify="center")
-        tabel.add_column("Tipe")
-        tabel.add_column("Fasilitas")
-        tabel.add_column("Harga/Malam", justify="right")
-
-        for no, (nomor, info) in enumerate(data_kamar.items(), start=1):
-            harga = f"Rp {info['harga']:,}".replace(",", ".")
-            tabel.add_row(str(no), nomor, info["tipe"], info["fasilitas"], harga)
-            
-        console.print(tabel)
-        console.print(f"\nTotal kamar: {len(data_kamar)}")
+            raise LookupError("Data kamar masih kosong.")
         
+        table = table_util("Daftar Kamar")
+        table.add_column("No", justify="center")
+        table.add_column("Kode Kamar", justify="center")
+        table.add_column("Tipe Kamar", justify="center")
+        table.add_column("Harga Per Malam", justify="center")
+        table.add_column("Fasilitas", justify="center")
+
+        for no, (id_kamar, info), in enumerate(data_kamar.items(), start=1):
+            table.add_row(
+                str(no),
+                id_kamar,
+                info["tipe"],
+                f"Rp {info['harga']:,}",
+                info["fasilitas"],
+            )
+
+        console.print(table)
+        console.print(f"\nTotal Kamar: {len(data_kamar)}")
+
     except LookupError as e:
         console.print(f"\n>> {e}")
     except KeyError as e:
         console.print(f"\n>> Data kamar tidak lengkap, kolom {e} tidak ditemukan.")
     except Exception as e:
-        console.print(f"\n>> Terjadi kesalahan tak terduga: {e}")
+        console.print(f"\n>> Terjadi kesalahan: {e}")
     finally:
         input("\nTekan Enter untuk kembali...")
 
+
 def kamar_tersedia():
-    os.system("cls" if os.name == "nt" else "clear")
+    reset()
     print(baris)
-    print("DAFTAR KAMAR TERSEDIA".center(60))
+    print("KAMAR TERSEDIA".center(60))
     print(baris)
     try:
         if not data_kamar:
             raise LookupError("Data kamar masih kosong.")
 
+        
         tersedia = {
             nomor: info for nomor, info in data_kamar.items() 
             if info["status"].lower() == "tersedia"
@@ -62,6 +74,7 @@ def kamar_tersedia():
         if not tersedia:
             raise LookupError("Tidak ada kamar yang tersedia saat ini.")
 
+
         tabel = table_util("Data Kamar Yang Tersedia")
         tabel.add_column("No", justify="center")
         tabel.add_column("No. Kamar", justify="center")
@@ -69,39 +82,154 @@ def kamar_tersedia():
         tabel.add_column("Harga/Malam", justify="right")
 
         for no, (nomor, info) in enumerate(tersedia.items(), start=1):
-            harga = f"Rp {info['harga']:,}".replace(",", ".")
-            tabel.add_row(str(no), nomor, info["tipe"], harga)
-            
+            tabel.add_row(
+                str(no),
+                nomor,
+                info["tipe"],
+                f"Rp {info['harga']:,}"
+            )
+
         console.print(tabel)
-        console.print(f"\nTotal kamar: {len(tersedia)}")
-        
+        console.print(f"\nTotal Kamar Tersedia: {len(tersedia)}")
+
     except LookupError as e:
         console.print(f"\n>> {e}")
     except KeyError as e:
         console.print(f"\n>> Data kamar tidak lengkap, kolom {e} tidak ditemukan.")
     except Exception as e:
-        console.print(f"\n>> Terjadi kesalahan tak terduga: {e}")
+        console.print(f"\n>> Terjadi kesalahan: {e}")
     finally:
         input("\nTekan Enter untuk kembali...")
 
+
+def reservasi_saya(username):
+    reset()
+    print(baris)
+    print("DETAIL DAN STATUS RESERVASI".center(60))
+    print(baris)
+    try:
+        milik = {k: r for k, r in data_reservasi.items() if r.get("username") == username}
+        if not milik:
+            raise LookupError("Anda belum memiliki reservasi.")
+
+        tabel = table_util("Reservasi Saya")
+        tabel.add_column("Kode")
+        tabel.add_column("No. Kamar", justify="center")
+        tabel.add_column("Check-in", justify="center")
+        tabel.add_column("Check-out", justify="center")
+        tabel.add_column("Status")
+
+        for (kode, info) in milik.items():
+            tabel.add_row(
+                kode, 
+                info["kamar"], 
+                info["checkin"], 
+                info["checkout"],
+                info.get("status", "MENUNGGU KONFIRMASI")
+            )
+
+        console.print(tabel)
+
+    except LookupError as e:
+        console.print(f"\n>> {e}")
+    except KeyError as e:
+        console.print(f"\n>> Data reservasi tidak lengkap, kolom {e} tidak ditemukan.")
+    except Exception as e:
+        console.print(f"\n>> Terjadi kesalahan: {e}")
+    finally:
+        input("\nTekan Enter untuk kembali...")
+
+
+def riwayat_pembayaran(username):
+    reset()
+    print(baris)
+    print("RIWAYAT PEMBAYARAN".center(60))
+    print(baris)
+    try:
+        milik = {k: r for k, r in data_reservasi.items() if r.get("username") == username}
+        if not milik:
+            raise LookupError("Anda belum memiliki reservasi.")
+
+        tabel = table_util("Riwayat Pembayaran")
+        tabel.add_column("Kode")
+        tabel.add_column("No. Kamar", justify="center")
+        tabel.add_column("Check-in", justify="center")
+        tabel.add_column("Check-out", justify="center")
+        tabel.add_column("Status")
+
+        for (kode, info) in milik.items():
+            tabel.add_row(
+                kode, 
+                info["kamar"], 
+                info["checkin"], 
+                info["checkout"],
+                info.get("status", "MENUNGGU KONFIRMASI")
+            )
+
+        console.print(tabel)
+
+    except LookupError as e:
+        console.print(f"\n>> {e}")
+    except KeyError as e:
+        console.print(f"\n>> Data reservasi tidak lengkap, kolom {e} tidak ditemukan.")
+    except Exception as e:
+        console.print(f"\n>> Terjadi kesalahan: {e}")
+    finally:
+        input("\nTekan Enter untuk kembali...")
+
+
+def pengumuman_hotel():
+    reset()
+    print(baris)
+    print("PENGUMUMAN HOTEL".center(60))
+    print(baris)
+    try:
+        if not data_pengumuman:
+            raise LookupError("Belum ada pengumuman.")
+        
+        table = table_util("Pengumuman Hotel")
+        table.add_column("No", justify="center")
+        table.add_column("Tanggal", justify="center")
+        table.add_column("isi")
+
+        for i, p in enumerate(data_pengumuman, start=1):
+            table.add_row(
+                i, 
+                p['tanggal'], 
+                p['isi'])
+
+        console.print(table)
+
+    except LookupError as e:
+        console.print(f"\n>> {e}")
+    except KeyError as e:
+        console.print(f"\n>> Data pengumuman tidak lengkap, kolom {e} tidak ditemukan.")
+    except Exception as e:
+        console.print(f"\n>> Terjadi kesalahan: {e}")
+    finally:
+        input("\nTekan Enter untuk kembali...")
+
+
 def reservasi_kamar(username):
-    os.system("cls" if os.name == "nt" else "clear")
+    reset()
     print(baris)
     print("RESERVASI KAMAR".center(60))
     print(baris)
     try:
         nomor = input("Nomor Kamar       : ").strip().upper()
-        try:
-            masuk = datetime.strptime(input("Tanggal Check-in  : ").strip(), FORMAT_TANGGAL)
-            keluar = datetime.strptime(input("Tanggal Check-out : ").strip(), FORMAT_TANGGAL)
-        except ValueError:
-            raise ValueError("Format tanggal harus DD-MM-YYYY, contoh 20-11-2026.")
-
         kamar = data_kamar[nomor]
+
+        masuk = input("Tanggal Check-in  : ").strip()
+        keluar = input("Tanggal Check-out : ").strip()
+
+
         if kamar["status"].lower() != "tersedia":
-            raise PermissionError(f"Kamar {nomor} sedang tidak tersedia.")
+            raise PermissionError
+
+        masuk = datetime.strptime(masuk, FORMAT_TANGGAL)
+        keluar = datetime.strptime(keluar, FORMAT_TANGGAL)
         if keluar <= masuk:
-            raise ValueError("Tanggal check-out harus setelah tanggal check-in.")
+            raise ArithmeticError
 
         malam = (keluar - masuk).days
         total = malam * kamar["harga"]
@@ -124,82 +252,32 @@ def reservasi_kamar(username):
         print(f"Lama Inap : {malam} malam")
         print(f"Total     : Rp {total:,}".replace(",", "."))
         print(f"\n>> Reservasi berhasil! Kode reservasi: {kode}")
+
     except KeyError:
-        print("\n>> Gagal! Nomor kamar tidak ditemukan.")
-    except (PermissionError, ValueError) as e:
-        print(f"\n>> Gagal! {e}")
-    finally:
-        input("\nTekan Enter untuk kembali...")
-
-def reservasi_saya(username):
-    os.system("cls" if os.name == "nt" else "clear")
-    print(baris)
-    print("RESERVASI SAYA".center(60))
-    print(baris)
-    try:
-        milik = {k: r for k, r in data_reservasi.items() if r.get("username") == username}
-        if not milik:
-            raise LookupError("Anda belum memiliki reservasi.")
-
-        tabel = table_util("Reservasi Saya")
-        tabel.add_column("Kode")
-        tabel.add_column("No. Kamar", justify="center")
-        tabel.add_column("Check-in", justify="center")
-        tabel.add_column("Check-out", justify="center")
-        tabel.add_column("Status")
-
-        for kode, r in milik.items():
-            tabel.add_row(kode, r["kamar"], r["checkin"], r["checkout"],
-                          r.get("status", "MENUNGGU KONFIRMASI"))
-        console.print(tabel)
-    except LookupError as e:
-        console.print(f"\n>> {e}")
-    except KeyError as e:
-        console.print(f"\n>> Data reservasi tidak lengkap, kolom {e} tidak ditemukan.")
-    finally:
-        input("\nTekan Enter untuk kembali...")
-
-
-def riwayat_pembayaran(username):
-    os.system("cls" if os.name == "nt" else "clear")
-    print(baris)
-    print("RIWAYAT PEMBAYARAN".center(60))
-    print(baris)
-    try:
-        milik = {k: r for k, r in data_reservasi.items() if r.get("username") == username}
-        if not milik:
-            raise LookupError("Belum ada riwayat pembayaran.")
-
-        tabel = table_util("Riwayat Pembayaran")
-        tabel.add_column("Kode")
-        tabel.add_column("Total Biaya", justify="right")
-        tabel.add_column("Status")
-
-        for kode, r in milik.items():
-            total = f"Rp {r['total']:,}".replace(",", ".")
-            tabel.add_row(kode, total, r.get("pembayaran", "BELUM LUNAS"))
-        console.print(tabel)
-    except LookupError as e:
-        console.print(f"\n>> {e}")
-    except KeyError as e:
-        console.print(f"\n>> Data reservasi tidak lengkap, kolom {e} tidak ditemukan.")
+        print("\n>> Nomor kamar tidak ditemukan.")
+    except PermissionError:
+        print("\n>> Kamar sedang tidak tersedia.")
+    except ArithmeticError:
+        print("\n>> Tanggal check-out harus setelah tanggal check-in.")
+    except ValueError:
+        print("\n>> Format tanggal harus DD-MM-YYYY, contoh 20-11-2026.")
     finally:
         input("\nTekan Enter untuk kembali...")
 
 
 def ubah_profil(username):
-    os.system("cls" if os.name == "nt" else "clear")
+    reset()
     print(baris)
-    print("UBAH PROFIL".center(60))
+    print("UBAH DATA DIRI".center(60))
     print(baris)
     print(f"Username saat ini : {username}")
     try:
+                
         print("\nKosongkan jika tidak diubah")
         user_baru = input("Username baru        : ").strip()
         pass_lama = getpass("Password lama        : ")
         pass_baru = getpass("Password baru        : ")
 
-        # akun di JSON berbentuk list: [username, password, "User"]
         akun = next((a for a in user if a[0] == username), None)
         if akun is None:
             raise KeyError("Akun tidak ditemukan.")
@@ -218,27 +296,13 @@ def ubah_profil(username):
             username = user_baru
 
         simpan()
-        print("\n>> Profil berhasil diperbarui!")
-    except PermissionError as e:
-        print(f"\n>> Gagal! {e}")
-    except KeyError as e:
-        print(f"\n>> Gagal! {e.args[0]}")
+        console.print("\n>> Data diri berhasil diperbarui.")
+
+    except KeyError:
+        console.print("\n>> Data pengguna tidak ditemukan.")
+    except Exception as e:
+        console.print(f"\n>> Terjadi kesalahan: {e}")
     finally:
         input("\nTekan Enter untuk kembali...")
-    return username
 
 
-def pengumuman_hotel():
-    os.system("cls" if os.name == "nt" else "clear")
-    print(baris)
-    print("PENGUMUMAN HOTEL".center(60))
-    print(baris)
-    try:
-        if not data_pengumuman:
-            raise LookupError("Belum ada pengumuman.")
-        for p in data_pengumuman:
-            print(f"[{p['tanggal']}] {p['isi']}")
-    except LookupError as e:
-        print(f"\n>> {e}")
-    finally:
-        input("\nTekan Enter untuk kembali...")
