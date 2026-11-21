@@ -2,13 +2,18 @@ import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
-from kelola import tampilan_kelola_kamar, tambah_kamar, tampilkan_kamar
+from kelola import tampilan_kelola_kamar
 from kelola_tamu import tampilan_kelola_tamu
+from kelola_reservasi import tampilan_kelola_reservasi
+from kelola_pembayaran import tampilan_kelola_pembayaran
+from rekaputulasi import rekaputulasi
+from kelola_pengumuman import tampilan_kelola_pengumuman
 baris = ("=" * 60)
 
 
 def menu_admin():
         while True:
+                os.system("cls")
                 print (baris)
                 print ("SELAMAT DATANG DI MENU ADMIN".center(60))
                 print (baris)
@@ -32,16 +37,13 @@ def menu_admin():
                         tampilan_kelola_tamu()
                         break
                 elif pilihan == 3:
-                        print (baris)
-                        print ("Kelola Reservasi")
+                        tampilan_kelola_reservasi()
                 elif pilihan == 4:
-                        print (baris)
-                        print ("Kelola Pembayaran")
+                        tampilan_kelola_pembayaran()
                 elif pilihan == 5:
-                        print (baris)
-                        print ("Rekaputulasi")
+                        rekaputulasi()
                 elif pilihan == 6:
-                        print ("Kelola Pengumuman")
+                        tampilan_kelola_pengumuman()
                 elif pilihan == 7:
-                        return
+                        break
                 

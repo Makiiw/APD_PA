@@ -202,9 +202,15 @@
         },
         "1": {
             "ID TAMU": "1",
-            "Nama": "DWA",
-            "NO. HP": 1231,
-            "Alamat": "fserf"
+            "Nama": "FALIH",
+            "NO. HP": 222,
+            "Alamat": "PP"
+        },
+        "23": {
+            "ID TAMU": "23",
+            "Nama": "ILYAS",
+            "NO. HP": 899,
+            "Alamat": "gg"
         }
     },
     "data_reservasi": {
