@@ -7,7 +7,7 @@ from kelola_tamu import tampilan_kelola_tamu
 from kelola_reservasi import tampilan_kelola_reservasi
 from kelola_pembayaran import tampilan_kelola_pembayaran
 from rekaputulasi import rekaputulasi
-from kelola_pengumuman import tampilan_kelola_pengumuman
+from pengumuman import tampilan_kelola_pengumuman
 baris = ("=" * 60)
 
 
