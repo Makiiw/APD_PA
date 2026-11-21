@@ -134,8 +134,8 @@ def tampilkan_reservasi():
         console.print(f"\n>> Data reservasi tidak lengkap, kolom {e} tidak ditemukan.")
     except Exception as e:
         console.print(f"\n>> Terjadi kesalahan: {e}")
-    # finally:
-    #     input("\nTekan Enter untuk kembali...")
+    finally:
+        input("\nTekan Enter untuk kembali...")
 
 
 def ubah_status_reservasi():

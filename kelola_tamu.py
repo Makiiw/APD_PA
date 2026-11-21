@@ -9,10 +9,11 @@ console = Console()
 baris = ("=" * 60)
 
 def tampilan_kelola_tamu():
+    while True:
         os.system("cls")
         print (baris)
         pilihan = inquirer.select(
-            message= "PILIHAN KELOLA KAMAR: ",
+            message= "PILIHAN KELOLA TAMU: ",
             choices = [
                     Choice(value= 1, name="Tambah Data Tamu"),
                     Choice(value=2, name="Tampil Data Tamu"),
@@ -30,6 +31,8 @@ def tampilan_kelola_tamu():
             ubah_tamu()
         elif pilihan == 4:
             hapus_tamu()
+        elif pilihan == 5:
+            break
 
 def tambah_tamu():
         os.system("cls")
@@ -75,27 +78,39 @@ def tampilkan_tamu():
     print(baris)
     try:
         if not data_tamu:
-            raise LookupError("Data tamu masih kosong.")
-
+            raise LookupError("Data tamu masih kosong.") 
         tabel = Table(title="Data Tamu Hotel", show_lines=True)
         tabel.add_column("No", justify="center")
         tabel.add_column("ID Tamu", justify="center")
         tabel.add_column("Nama")
         tabel.add_column("No. HP")
         tabel.add_column("Alamat")
-
-        for no, (id_tamu, info) in enumerate(data_tamu.items(), start=1):
-            tabel.add_row(str(no), id_tamu, info["Nama"], str(info["NO. HP"]), info["Alamat"])
-
+        
+        nomor = 0
+        dilewati = 0
+        for id_tamu, info in data_tamu.items():
+            try:
+                nama = info["Nama"]
+                hp = str(info["NO. HP"])
+                alamat = str(info["Alamat"])
+            except (KeyError, TypeError):
+                dilewati += 1
+                continue
+            nomor += 1
+            tabel.add_row(str(nomor), id_tamu, nama, hp, alamat)
+            
         console.print(tabel)
-        console.print(f"\nTotal tamu: {len(data_tamu)}")
-
+        console.print(f"\nTotal tamu: {nomor}")
+        if dilewati:
+            console.print(
+                f">> {dilewati} data dilewati karena formatnya tidak lengkap.",
+                markup=False,
+            )
+            
     except LookupError as e:
-        console.print(f"\n>> {e}")
-    except KeyError as e:
-        console.print(f"\n>> Data tamu tidak lengkap, kolom {e} tidak ditemukan.")
+        console.print(f"\n>> {e}", markup=False)
     except Exception as e:
-        console.print(f"\n>> Terjadi kesalahan: {e}")
+        console.print(f"\n>> Terjadi kesalahan: {e}", markup=False)
     finally:
         input("\nTekan Enter untuk kembali...")
 
@@ -107,14 +122,13 @@ def ubah_tamu():
     print(baris)
     try:
         id_tamu = input("Masukkan ID tamu yang diubah: ").strip().upper()
-        tamu = data_tamu[id_tamu]  # KeyError jika ID tidak ada
+        tamu = data_tamu[id_tamu]  
 
         print("\nKosongkan jika tidak diubah")
         nama = input(f"Nama [{tamu['Nama']}]: ").strip().upper()
         hp = input(f"No. HP [{tamu['NO. HP']}]: ").strip()
         alamat = input(f"Alamat [{tamu['Alamat']}]: ").strip().upper()
 
-        # validasi dulu, jika salah belum ada data yang berubah
         hp_baru = int(hp) if hp else tamu["NO. HP"]
         if hp_baru <= 0:
             raise ValueError
