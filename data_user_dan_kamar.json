@@ -225,5 +225,10 @@
             "pembayaran": "BELUM LUNAS"
         }
     },
-    "data_pengumuman": []
+    "data_pengumuman": [
+        {
+            "tanggal": "22-11-2026",
+            "isi": "Test"
+        }
+    ]
 }
