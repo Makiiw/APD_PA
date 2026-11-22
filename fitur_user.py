@@ -4,6 +4,9 @@ from data import data_kamar, data_reservasi, user, data_pengumuman, simpan
 from util import table as table_util
 from datetime import datetime
 from getpass import getpass
+from InquirerPy import inquirer
+from InquirerPy.base.control import Choice
+from InquirerPy.separator import Separator
 
 FORMAT_TANGGAL = "%d-%m-%Y"
 
@@ -33,6 +36,7 @@ def tampilkan_kamar():
         table.add_column("Tipe Kamar", justify="center")
         table.add_column("Harga Per Malam", justify="center")
         table.add_column("Fasilitas", justify="center")
+        table.add_column("Status", justify="center")
 
         for no, (id_kamar, info), in enumerate(data_kamar.items(), start=1):
             table.add_row(
@@ -41,56 +45,11 @@ def tampilkan_kamar():
                 info["tipe"],
                 f"Rp {info['harga']:,}",
                 info["fasilitas"],
+                info["status"],
             )
 
         console.print(table)
         console.print(f"\nTotal Kamar: {len(data_kamar)}")
-
-    except LookupError as e:
-        console.print(f"\n>> {e}")
-    except KeyError as e:
-        console.print(f"\n>> Data kamar tidak lengkap, kolom {e} tidak ditemukan.")
-    except Exception as e:
-        console.print(f"\n>> Terjadi kesalahan: {e}")
-    finally:
-        input("\nTekan Enter untuk kembali...")
-
-
-def kamar_tersedia():
-    reset()
-    print(baris)
-    print("KAMAR TERSEDIA".center(60))
-    print(baris)
-    try:
-        if not data_kamar:
-            raise LookupError("Data kamar masih kosong.")
-
-        
-        tersedia = {
-            nomor: info for nomor, info in data_kamar.items() 
-            if info["status"].lower() == "tersedia"
-        }
-
-        if not tersedia:
-            raise LookupError("Tidak ada kamar yang tersedia saat ini.")
-
-
-        tabel = table_util("Data Kamar Yang Tersedia")
-        tabel.add_column("No", justify="center")
-        tabel.add_column("No. Kamar", justify="center")
-        tabel.add_column("Tipe")
-        tabel.add_column("Harga/Malam", justify="right")
-
-        for no, (nomor, info) in enumerate(tersedia.items(), start=1):
-            tabel.add_row(
-                str(no),
-                nomor,
-                info["tipe"],
-                f"Rp {info['harga']:,}"
-            )
-
-        console.print(tabel)
-        console.print(f"\nTotal Kamar Tersedia: {len(tersedia)}")
 
     except LookupError as e:
         console.print(f"\n>> {e}")
@@ -194,7 +153,7 @@ def pengumuman_hotel():
 
         for i, p in enumerate(data_pengumuman, start=1):
             table.add_row(
-                i, 
+                str(i), 
                 p['tanggal'], 
                 p['isi'])
 
@@ -211,98 +170,143 @@ def pengumuman_hotel():
 
 
 def reservasi_kamar(username):
-    reset()
-    print(baris)
-    print("RESERVASI KAMAR".center(60))
-    print(baris)
-    try:
-        nomor = input("Nomor Kamar       : ").strip().upper()
-        kamar = data_kamar[nomor]
 
-        masuk = input("Tanggal Check-in  : ").strip()
-        keluar = input("Tanggal Check-out : ").strip()
+    while True:
+        reset()
+        print(baris)
+        print("RESERVASI KAMAR".center(60))
+        print(baris)
+        try:
+
+            if not data_kamar:
+                raise LookupError("Data kamar masih kosong.")
+
+            
+            tersedia = {
+                nomor: info for nomor, info in data_kamar.items() 
+                if info["status"].lower() == "tersedia"
+            }
+
+            if not tersedia:
+                raise LookupError("Tidak ada kamar yang tersedia saat ini.")
 
 
-        if kamar["status"].lower() != "tersedia":
-            raise PermissionError
+            tabel = table_util("Kamar Yang Tersedia")
+            tabel.add_column("No", justify="center")
+            tabel.add_column("No. Kamar", justify="center")
+            tabel.add_column("Tipe")
+            tabel.add_column("Harga/Malam", justify="right")
 
-        masuk = datetime.strptime(masuk, FORMAT_TANGGAL)
-        keluar = datetime.strptime(keluar, FORMAT_TANGGAL)
-        if keluar <= masuk:
-            raise ArithmeticError
+            for no, (nomor, info) in enumerate(tersedia.items(), start=1):
+                tabel.add_row(
+                    str(no),
+                    nomor,
+                    info["tipe"],
+                    f"Rp {info['harga']:,}"
+                )
 
-        malam = (keluar - masuk).days
-        total = malam * kamar["harga"]
-        kode = buat_kode_reservasi()
+            console.print(tabel)
+            console.print(f"\nTotal Kamar Tersedia: {len(tersedia)}")
 
-        data_reservasi[kode] = {
-            "username": username,
-            "kamar": nomor,
-            "checkin": masuk.strftime(FORMAT_TANGGAL),
-            "checkout": keluar.strftime(FORMAT_TANGGAL),
-            "malam": malam,
-            "total": total,
-            "status": "MENUNGGU KONFIRMASI",
-            "pembayaran": "BELUM LUNAS",
-        }
-        kamar["status"] = "TERISI"
-        simpan()
+            print(baris)
 
-        print(f"\nKamar     : {nomor} ({kamar['tipe']})")
-        print(f"Lama Inap : {malam} malam")
-        print(f"Total     : Rp {total:,}".replace(",", "."))
-        print(f"\n>> Reservasi berhasil! Kode reservasi: {kode}")
+            nomor = input("Nomor Kamar       : ").strip().upper()
+            kamar = data_kamar[nomor]
 
-    except KeyError:
-        print("\n>> Nomor kamar tidak ditemukan.")
-    except PermissionError:
-        print("\n>> Kamar sedang tidak tersedia.")
-    except ArithmeticError:
-        print("\n>> Tanggal check-out harus setelah tanggal check-in.")
-    except ValueError:
-        print("\n>> Format tanggal harus DD-MM-YYYY, contoh 20-11-2026.")
-    finally:
-        input("\nTekan Enter untuk kembali...")
+            masuk = input("Tanggal Check-in  : ").strip()
+            keluar = input("Tanggal Check-out : ").strip()
 
+
+            if kamar["status"].lower() != "tersedia":
+                raise PermissionError
+
+            masuk = datetime.strptime(masuk, FORMAT_TANGGAL)
+            keluar = datetime.strptime(keluar, FORMAT_TANGGAL)
+            if keluar <= masuk:
+                raise ArithmeticError
+
+            malam = (keluar - masuk).days
+            total = malam * kamar["harga"]
+            kode = buat_kode_reservasi()
+
+            data_reservasi[kode] = {
+                "username": username,
+                "kamar": nomor,
+                "checkin": masuk.strftime(FORMAT_TANGGAL),
+                "checkout": keluar.strftime(FORMAT_TANGGAL),
+                "malam": malam,
+                "total": total,
+                "status": "MENUNGGU KONFIRMASI",
+                "pembayaran": "BELUM LUNAS",
+            }
+            kamar["status"] = "TERISI"
+            simpan()
+
+            print(f"\nKamar     : {nomor} ({kamar['tipe']})")
+            print(f"Lama Inap : {malam} malam")
+            print(f"Total     : Rp {total:,}".replace(",", "."))
+            print(f"\n>> Reservasi berhasil! Kode reservasi: {kode}")
+            input("\nTekan Enter untuk kembali...")
+            return
+
+
+        except KeyError:
+            print("\n>> Nomor kamar tidak ditemukan.")
+        except LookupError as e:
+            print(f"\n>> {e}")
+            input("\nTekan Enter untuk kembali...")
+            return
+        except PermissionError:
+            print("\n>> Kamar sedang tidak tersedia.")
+        except ArithmeticError:
+            print("\n>> Tanggal check-out harus setelah tanggal check-in.")
+        except ValueError:
+            print("\n>> Format tanggal harus DD-MM-YYYY, contoh 20-11-2026.")
+
+        ulang = input("\nCoba lagi? (y/n): ").strip().lower()
+        if ulang != "y":
+            return
 
 def ubah_profil(username):
-    reset()
-    print(baris)
-    print("UBAH DATA DIRI".center(60))
-    print(baris)
-    print(f"Username saat ini : {username}")
-    try:
-                
-        print("\nKosongkan jika tidak diubah")
-        user_baru = input("Username baru        : ").strip()
-        pass_lama = getpass("Password lama        : ")
-        pass_baru = getpass("Password baru        : ")
+    
+    while True:
+        reset()
+        print(baris)
+        print("UBAH DATA DIRI".center(60))
+        print(baris)
+        print(f"Username saat ini : {username}")
+        try:
+                    
+            print("\nKosongkan jika tidak diubah")
+            user_baru = input("Username baru        : ").strip()
+            pass_lama = getpass("Password lama        : ")
+            pass_baru = getpass("Password baru        : ")
 
-        akun = next((a for a in user if a[0] == username), None)
-        if akun is None:
-            raise KeyError("Akun tidak ditemukan.")
-        if pass_lama != akun[1]:
-            raise PermissionError("Password lama tidak sesuai.")
-        if user_baru and user_baru != username and any(a[0] == user_baru for a in user):
-            raise KeyError("Username sudah dipakai.")
+            akun = next((a for a in user if a[0] == username), None)
+            if akun is None:
+                raise KeyError("Akun tidak ditemukan.")
+            if pass_lama != akun[1]:
+                raise PermissionError("Password lama tidak sesuai.")
+            if user_baru and user_baru != username and any(a[0] == user_baru for a in user):
+                raise KeyError("Username sudah dipakai.")
 
-        if pass_baru:
-            akun[1] = pass_baru
-        if user_baru and user_baru != username:
-            akun[0] = user_baru
-            for r in data_reservasi.values():
-                if r.get("username") == username:
-                    r["username"] = user_baru
-            username = user_baru
+            if pass_baru:
+                akun[1] = pass_baru
+            if user_baru and user_baru != username:
+                akun[0] = user_baru
+                for r in data_reservasi.values():
+                    if r.get("username") == username:
+                        r["username"] = user_baru
+                username = user_baru
 
-        simpan()
-        console.print("\n>> Data diri berhasil diperbarui.")
+            simpan()
+            console.print("\n>> Data diri berhasil diperbarui.")
 
-    except KeyError:
-        console.print("\n>> Data pengguna tidak ditemukan.")
-    except Exception as e:
-        console.print(f"\n>> Terjadi kesalahan: {e}")
-    finally:
-        input("\nTekan Enter untuk kembali...")
+        except KeyError:
+            console.print("\n>> Data pengguna tidak ditemukan.")
+        except Exception as e:
+            console.print(f"\n>> Terjadi kesalahan: {e}")
+        finally:
+            input("\nTekan Enter untuk kembali...")
 
 
