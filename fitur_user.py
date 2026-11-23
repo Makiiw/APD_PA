@@ -3,7 +3,7 @@ from rich.console import Console
 from data import data_kamar, data_reservasi, user, data_pengumuman, simpan
 from util import table as table_util
 from datetime import datetime
-from getpass import getpass
+from pwinput import pwinput
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
@@ -279,8 +279,8 @@ def ubah_profil(username):
                     
             print("\nKosongkan jika tidak diubah")
             user_baru = input("Username baru        : ").strip()
-            pass_lama = getpass("Password lama        : ")
-            pass_baru = getpass("Password baru        : ")
+            pass_lama = pwinput("Password lama        : ")
+            pass_baru = pwinput("Password baru        : ")
 
             akun = next((a for a in user if a[0] == username), None)
             if akun is None:
