@@ -3,6 +3,7 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from rich.console import Console
+from rich.markup import escape
 from data import data_reservasi, simpan
 from util import table as table_util, rupiah
 
@@ -55,14 +56,15 @@ def tampilkan_pembayaran():
         for no, (kode, r) in enumerate(data_reservasi.items(), start=1):
             pembayaran = r.get("pembayaran", "BELUM LUNAS")
             status = r.get("status", "MENUNGGU KONFIRMASI")
-            tabel.add_row(str(no), kode, r["username"], rupiah(r["total"]), status, pembayaran)
+            total = r.get("total", 0)
+            tabel.add_row(str(no), kode, escape(str(r.get("username", "-"))), rupiah(total), status, pembayaran)
 
-            if pembayaran == "LUNAS":
+            if pembayaran == "LUNAS" and status != "DIBATALKAN":
                 jumlah_lunas += 1
-                total_lunas += r["total"]
+                total_lunas += total
             elif status != "DIBATALKAN": 
                 jumlah_belum += 1
-                total_belum += r["total"]
+                total_belum += total
 
         console.print(tabel)
         console.print(f"\nLunas       : {jumlah_lunas} pembayaran  ({rupiah(total_lunas)})")
@@ -93,8 +95,8 @@ def ubah_status_pelunasan():
         if pembayaran == "LUNAS":
             raise PermissionError(f"Pembayaran {kode} sudah berstatus LUNAS.")
 
-        print(f"\nTamu            : {r['username']}")
-        print(f"Total Biaya     : {rupiah(r['total'])}")
+        print(f"\nTamu            : {r.get('username', '-')}")
+        print(f"Total Biaya     : {rupiah(r.get('total', 0))}")
         print(f"Pembayaran      : {pembayaran}\n")
 
         status_baru = inquirer.select(

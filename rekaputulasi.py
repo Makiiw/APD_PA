@@ -44,9 +44,11 @@ def rekaputulasi():
         lunas = 0
         belum = 0
         for r in data_reservasi.values():
+            if r.get("status", "MENUNGGU KONFIRMASI") == "DIBATALKAN":
+                continue
             if r.get("pembayaran", "BELUM LUNAS") == "LUNAS":
                 lunas += r["total"]
-            elif r.get("status", "MENUNGGU KONFIRMASI") != "DIBATALKAN":
+            else:
                 belum += r["total"]
 
         tabel_uang = table_util("Rekap Pemasukan")

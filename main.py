@@ -38,7 +38,6 @@ def menu_utama():
                 try:
                     akun = admin(nama, sandi)   
                     print(f"Login berhasil! Selamat datang".center(60))
-                    input ("Tekan enter untuk melanjutkan.".center(60))
                     menu_admin()
                 except ValueError as e:
                     input(str(e) + "\nTekan Enter untuk melanjutkan...")
@@ -50,7 +49,6 @@ def menu_utama():
                 try:
                     username = user(nama, sandi)
                     print("Login berhasil".center(60))
-                    input ("Tekan enter untuk melanjutkan.".center(60))
                     menu_user(username)
                 except ValueError as e:
                     input(str(e) + "\nTekan Enter untuk melanjutkan...")
