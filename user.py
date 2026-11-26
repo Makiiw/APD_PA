@@ -2,7 +2,6 @@ import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
-from prompt_toolkit import choice
 import fitur_user as user
 
 def menu_user(username):
