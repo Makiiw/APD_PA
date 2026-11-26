@@ -45,4 +45,4 @@ def menu_user(username):
             print ("Pilihan Tidak Valid. Masukkan Angka 1-8.".center(60))
 
 if __name__ == "__main__":
-    menu_user()
+    menu_user("tes")

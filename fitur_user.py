@@ -1,7 +1,7 @@
 import os
 from rich.console import Console
 from data import data_kamar, data_reservasi, user, data_pengumuman, simpan
-from util import table as table_util
+from util import table as table_util, rupiah
 from datetime import datetime
 from pwinput import pwinput
 from InquirerPy import inquirer
@@ -13,7 +13,14 @@ FORMAT_TANGGAL = "%d-%m-%Y"
 baris = ("=" * 60)
 
 def buat_kode_reservasi():
-    return f"RSV-{len(data_reservasi) + 1:03d}"
+    nomor_terbesar = 0
+    for kode in data_reservasi:
+        try:
+            nomor = int(kode.split("-")[1])
+        except (IndexError, ValueError):
+            continue
+        nomor_terbesar = max(nomor_terbesar, nomor)
+    return f"RSV-{nomor_terbesar + 1:03d}"
 
 console = Console()
 
@@ -43,7 +50,7 @@ def tampilkan_kamar():
                 str(no),
                 id_kamar,
                 info["tipe"],
-                f"Rp {info['harga']:,}",
+                rupiah(info["harga"]),
                 info["fasilitas"],
                 info["status"],
             )
@@ -114,18 +121,29 @@ def riwayat_pembayaran(username):
         tabel.add_column("No. Kamar", justify="center")
         tabel.add_column("Check-in", justify="center")
         tabel.add_column("Check-out", justify="center")
+        tabel.add_column("Total", justify="right")
+        tabel.add_column("Pembayaran", justify="center")
         tabel.add_column("Status")
 
+        total_belum_lunas = 0
         for (kode, info) in milik.items():
+            total = info.get("total", 0)
+            pembayaran = info.get("pembayaran", "BELUM LUNAS")
+            if pembayaran.upper() != "LUNAS":
+                total_belum_lunas += total
+
             tabel.add_row(
                 kode, 
                 info["kamar"], 
                 info["checkin"], 
                 info["checkout"],
+                rupiah(total),
+                pembayaran,
                 info.get("status", "MENUNGGU KONFIRMASI")
             )
 
         console.print(tabel)
+        console.print(f"\nTotal belum dibayar: {rupiah(total_belum_lunas)}")
 
     except LookupError as e:
         console.print(f"\n>> {e}")
@@ -202,11 +220,12 @@ def reservasi_kamar(username):
                     str(no),
                     nomor,
                     info["tipe"],
-                    f"Rp {info['harga']:,}"
+                    rupiah(info["harga"])
                 )
 
             console.print(tabel)
             console.print(f"\nTotal Kamar Tersedia: {len(tersedia)}")
+            print(f"Total     : {rupiah(total)}")
 
             print(baris)
 
@@ -239,7 +258,7 @@ def reservasi_kamar(username):
                 "status": "MENUNGGU KONFIRMASI",
                 "pembayaran": "BELUM LUNAS",
             }
-            kamar["status"] = "TERISI"
+            kamar["status"] = "DIPESAN"
             simpan()
 
             print(f"\nKamar     : {nomor} ({kamar['tipe']})")
@@ -301,12 +320,14 @@ def ubah_profil(username):
 
             simpan()
             console.print("\n>> Data diri berhasil diperbarui.")
+            input("\nTekan Enter untuk kembali...")
+            return username
 
-        except KeyError:
-            console.print("\n>> Data pengguna tidak ditemukan.")
+        except (LookupError, PermissionError, ValueError) as e:
+            console.print(f"\n>> {e}")
         except Exception as e:
             console.print(f"\n>> Terjadi kesalahan: {e}")
-        finally:
-            input("\nTekan Enter untuk kembali...")
 
-
+        ulang = input("\nCoba lagi? (y/n): ").strip().lower()
+        if ulang != "y":
+            return username
