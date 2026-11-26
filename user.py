@@ -2,7 +2,6 @@ import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
-from prompt_toolkit import choice
 import fitur_user as user
 
 def menu_user(username):
@@ -16,13 +15,13 @@ def menu_user(username):
         pilihan = inquirer.select(
             message= "PILIHAN MENU: ",
             choices=[
-                    Choice(value=1, name="[1] Informasi Dan Fasilitas Kamar"),
-                    Choice(value=3, name="[2] Detail Dan Status Reservasi"),
-                    Choice(value=4, name ="[3] Informasi Dan Riwayat Pembayaran"),
-                    Choice(value=5, name ="[4] Pengumuman Hotel"),
-                    Choice(value=6, name ="[5] Reservasi Kamar"),
-                    Choice(value=7, name ="[6] ubah Data Diri"),
-                    Choice(value=8, name ="[7] logout"),
+                    Choice(value=1, name="- Informasi Dan Fasilitas Kamar"),
+                    Choice(value=3, name="- Detail Dan Status Reservasi"),
+                    Choice(value=4, name ="- Informasi Dan Riwayat Pembayaran"),
+                    Choice(value=5, name ="- Pengumuman Hotel"),
+                    Choice(value=6, name ="- Reservasi Kamar"),
+                    Choice(value=7, name ="- ubah Data Diri"),
+                    Choice(value=8, name ="- logout"),
                     Separator(baris),
                 ],
         ).execute()
@@ -46,4 +45,4 @@ def menu_user(username):
             print ("Pilihan Tidak Valid. Masukkan Angka 1-8.".center(60))
 
 if __name__ == "__main__":
-    menu_user()
+    menu_user("tes")
