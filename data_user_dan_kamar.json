@@ -194,12 +194,6 @@
             "no_hp": "ASU",
             "alamat": 200000
         },
-        "11": {
-            "ID TAMU": "11",
-            "Nama": "ANJING",
-            "NO. HP": 123412,
-            "Alamat": "aehkhfa"
-        },
         "1": {
             "ID TAMU": "1",
             "Nama": "FALIH",
@@ -213,22 +207,6 @@
             "Alamat": "gg"
         }
     },
-    "data_reservasi": {
-        "RSV-001": {
-            "username": "user",
-            "kamar": "103",
-            "checkin": "28-09-2008",
-            "checkout": "10-10-2008",
-            "malam": 12,
-            "total": 2400000,
-            "status": "MENUNGGU KONFIRMASI",
-            "pembayaran": "BELUM LUNAS"
-        }
-    },
-    "data_pengumuman": [
-        {
-            "tanggal": "22-11-2026",
-            "isi": "Test"
-        }
-    ]
+    "data_reservasi": {},
+    "data_pengumuman": []
 }

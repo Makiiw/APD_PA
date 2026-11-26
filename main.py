@@ -6,6 +6,7 @@ from autentikasi import admin,user, register
 from admin import menu_admin
 from colorama import Fore
 from user import menu_user
+import pwinput
 
 
 
@@ -14,24 +15,27 @@ def menu_utama():
         os.system("cls")
         baris = ("=" * 60)
         print (baris)
-        print ("HotelManage - Reservasi Hotel".center(60))
+        print ("H O T E L M A N A G E".center(60))
+        print ("Sistem Reservasi Hotel".center(60))
         print (baris)
         pilihan = inquirer.select(
             message= "PILIHAN MENU: ",
             choices=[
-                    Choice(value=1, name="- Admin"),
-                    Choice(value=2, name="- Pengguna"),
-                    Choice(value=3, name="- Registrasi"),
-                    Choice(value=4, name ="- Exit"),
+                    Choice(value=1, name="[1] Masuk Sebagai Admin"),
+                    Choice(value=2, name="[2] Masuk Sebagai Pengguna"),
+                    Choice(value=3, name="[3] Registrasi Akun Baru"),
+                    Choice(value=4, name ="[4] Keluar"),
                     Separator(baris),
                     ],
+            qmark="",
+            long_instruction="↑↓ pilih  •  Enter konfirmasi",
         ).execute()
         print (baris)
         
         if pilihan == 1:
                 os.system("cls")
                 nama = input("Masukkan Username: ").strip()
-                sandi = input("Masukkan Password: ").strip()
+                sandi = pwinput.pwinput("Masukkan Password: ").strip()
                 try:
                     akun = admin(nama, sandi)   
                     print(f"Login berhasil! Selamat datang".center(60))
@@ -42,7 +46,7 @@ def menu_utama():
         elif pilihan == 2:
                 os.system("cls")
                 nama = input("Masukkan Username: ").strip()
-                sandi = input("Masukkan Password: ").strip()
+                sandi = pwinput.pwinput("Masukkan Password: ").strip()
                 try:
                     username = user(nama, sandi)
                     print("Login berhasil".center(60))

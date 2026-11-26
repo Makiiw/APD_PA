@@ -16,13 +16,13 @@ def menu_user(username):
         pilihan = inquirer.select(
             message= "PILIHAN MENU: ",
             choices=[
-                    Choice(value=1, name="- Informasi Dan Fasilitas Kamar"),
-                    Choice(value=3, name="- Detail Dan Status Reservasi"),
-                    Choice(value=4, name ="- Informasi Dan Riwayat Pembayaran"),
-                    Choice(value=5, name ="- Pengumuman Hotel"),
-                    Choice(value=6, name ="- Reservasi Kamar"),
-                    Choice(value=7, name ="- ubah Data Diri"),
-                    Choice(value=8, name ="- logout"),
+                    Choice(value=1, name="[1] Informasi Dan Fasilitas Kamar"),
+                    Choice(value=3, name="[2] Detail Dan Status Reservasi"),
+                    Choice(value=4, name ="[3] Informasi Dan Riwayat Pembayaran"),
+                    Choice(value=5, name ="[4] Pengumuman Hotel"),
+                    Choice(value=6, name ="[5] Reservasi Kamar"),
+                    Choice(value=7, name ="[6] ubah Data Diri"),
+                    Choice(value=8, name ="[7] logout"),
                     Separator(baris),
                 ],
         ).execute()
