@@ -37,7 +37,6 @@ def menu_admin():
                         tampilan_kelola_kamar()
                 elif pilihan == 2:
                         tampilan_kelola_tamu()
-                        break
                 elif pilihan == 3:
                         tampilan_kelola_reservasi()
                 elif pilihan == 4:

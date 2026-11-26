@@ -53,9 +53,11 @@ def register():
     os.system("cls")
     username_baru = input("Masukkan Username Baru: ").strip()
     password_baru = pwinput.pwinput("Masukkan Password Baru: ").strip()
+    if not username_baru or not password_baru:
+        raise ValueError("Username dan Password tidak boleh kosong!")
     for akun in data.admin + data.user:
         if akun[0] == username_baru:
             raise ValueError("Username sudah digunakan, Silahkan gunakan username lain!")
     data.user.append([username_baru, password_baru, "User"])
     data.simpan()
-    print("Register berhasil!")
+    input("Register berhasil! Tekan Enter untuk melanjutkan...")

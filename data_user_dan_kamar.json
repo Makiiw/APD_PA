@@ -96,16 +96,6 @@
             "tset",
             "tset",
             "User"
-        ],
-        [
-            "anjing",
-            "anjing123",
-            "User"
-        ],
-        [
-            "babi",
-            "babi123",
-            "User"
         ]
     ],
     "data_kamar": {
@@ -113,13 +103,13 @@
             "tipe": "STANDARD",
             "fasilitas": "AC, TV, WIFI",
             "harga": 250000,
-            "status": "TERSEDIA"
+            "status": "DIPESAN"
         },
         "102": {
             "tipe": "STANDARD",
             "fasilitas": "AC, TV, WIFI",
             "harga": 250000,
-            "status": "TERSEDIA"
+            "status": "DIPESAN"
         },
         "103": {
             "tipe": "PREMIUM",
@@ -131,13 +121,13 @@
             "tipe": "STANDARD",
             "fasilitas": "AC, TV, WIFI",
             "harga": 250000,
-            "status": "DIPESAN"
+            "status": "TERSEDIA"
         },
         "105": {
             "tipe": "PREMIUM",
             "fasilitas": "AC, TV, WIFI, KULKAS",
             "harga": 400000,
-            "status": "TERISI"
+            "status": "TERSEDIA"
         },
         "201": {
             "tipe": "DELUXE",
@@ -149,7 +139,7 @@
             "tipe": "DELUXE",
             "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB",
             "harga": 600000,
-            "status": "TERISI"
+            "status": "TERSEDIA"
         },
         "203": {
             "tipe": "DELUXE",
@@ -161,7 +151,7 @@
             "tipe": "FAMILY",
             "fasilitas": "AC, TV, WIFI, KULKAS, 2 KASUR",
             "harga": 750000,
-            "status": "DIPESAN"
+            "status": "TERSEDIA"
         },
         "205": {
             "tipe": "FAMILY",
@@ -189,11 +179,6 @@
         }
     },
     "data_tamu": {
-        "id_tamu": {
-            "nama_tamu": "PREMIUM",
-            "no_hp": "ASU",
-            "alamat": 200000
-        },
         "1": {
             "ID TAMU": "1",
             "Nama": "FALIH",
@@ -207,6 +192,37 @@
             "Alamat": "gg"
         }
     },
-    "data_reservasi": {},
+    "data_reservasi": {
+        "RSV-001": {
+            "username": "user",
+            "kamar": "303",
+            "checkin": "28-11-2026",
+            "checkout": "30-11-2026",
+            "malam": 2,
+            "total": 4000000,
+            "status": "SELESAI",
+            "pembayaran": "LUNAS"
+        },
+        "RSV-002": {
+            "username": "user",
+            "kamar": "101",
+            "checkin": "28-11-2026",
+            "checkout": "30-11-2026",
+            "malam": 2,
+            "total": 500000,
+            "status": "MENUNGGU KONFIRMASI",
+            "pembayaran": "BELUM LUNAS"
+        },
+        "RSV-003": {
+            "username": "user",
+            "kamar": "102",
+            "checkin": "29-11-2026",
+            "checkout": "30-11-2026",
+            "malam": 1,
+            "total": 250000,
+            "status": "MENUNGGU KONFIRMASI",
+            "pembayaran": "BELUM LUNAS"
+        }
+    },
     "data_pengumuman": []
 }

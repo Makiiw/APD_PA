@@ -1,7 +1,9 @@
 import json
-FILE = "data_user_dan_kamar.json"
+from pathlib import Path
 
-with open(FILE, "r") as f:
+FILE = Path(__file__).with_name("data_user_dan_kamar.json")
+
+with FILE.open("r", encoding="utf-8") as f:
     data = json.load(f)
 
 admin = data["admin"]
@@ -12,6 +14,6 @@ data_reservasi = data["data_reservasi"]
 data_pengumuman = data["data_pengumuman"]
 
 def simpan():
-    with open(FILE, "w") as f:
-        json.dump(data, f, indent=4)
+    with FILE.open("w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
         

@@ -2,7 +2,7 @@ import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
-from data import data_kamar, simpan, data_tamu
+from data import simpan, data_tamu
 from rich.console import Console
 from rich.table import Table
 console = Console()
@@ -42,16 +42,15 @@ def tambah_tamu():
         try:
             id_tamu = input("Masukan Id Tamu: ").strip().upper()
             nama_tamu = input("Masukan Nama Tamu: ").strip().upper()
-            no_hp = input("Masukan No HP: ").strip().upper()
+            no_hp = input("Masukan No HP: ").strip()
             alamat = input("Masukan Alamat: ").strip()
             
             if "" in (id_tamu, nama_tamu, no_hp, alamat):
                 raise ValueError("Semua data wajib diisi.")
             if id_tamu in data_tamu:
-                raise KeyError(f"Nomor kamar sudah terdaftar.")
-            no_hp = int(no_hp)
-            if no_hp <= 0:
-                raise ValueError("Harga harus lebih dari 0.")
+                raise KeyError(f"ID tamu {id_tamu} sudah terdaftar.")
+            if not no_hp.isdigit():
+                raise ValueError("No. HP harus berupa angka.")
             data_tamu[id_tamu] = {
                 "ID TAMU": id_tamu,
                 "Nama": nama_tamu,
@@ -127,11 +126,11 @@ def ubah_tamu():
         print("\nKosongkan jika tidak diubah")
         nama = input(f"Nama [{tamu['Nama']}]: ").strip().upper()
         hp = input(f"No. HP [{tamu['NO. HP']}]: ").strip()
-        alamat = input(f"Alamat [{tamu['Alamat']}]: ").strip().upper()
+        alamat = input(f"Alamat [{tamu['Alamat']}]: ").strip()
 
-        hp_baru = int(hp) if hp else tamu["NO. HP"]
-        if hp_baru <= 0:
+        if hp and not hp.isdigit():
             raise ValueError
+        hp_baru = hp if hp else str(tamu["NO. HP"])
 
         tamu["Nama"] = nama or tamu["Nama"]
         tamu["NO. HP"] = hp_baru

@@ -67,6 +67,8 @@ def tambah_reservasi():
         kamar = data_kamar[nomor]
         if kamar["status"].upper() != "TERSEDIA":
             raise PermissionError(f"Kamar {nomor} sedang tidak tersedia.")
+        if masuk.date() < datetime.now().date():
+            raise ValueError("Tanggal check-in tidak boleh sebelum hari ini.")
         if keluar <= masuk:
             raise ValueError("Tanggal check-out harus setelah tanggal check-in.")
 
@@ -84,7 +86,7 @@ def tambah_reservasi():
             "status": "DIKONFIRMASI",
             "pembayaran": "BELUM LUNAS",
         }
-        kamar["status"] = "TERISI"
+        kamar["status"] = "DIPESAN"
         simpan()
 
         print(f"\nKamar     : {nomor} ({kamar['tipe']})")
@@ -101,9 +103,6 @@ def tambah_reservasi():
 
 def tampilkan_reservasi():
     os.system("cls")
-    print(baris)
-    print("DAFTAR RESERVASI".center(60))
-    print(baris)
     try:
         if not data_reservasi:
             console.print("\n>> Data reservasi masih kosong.")
@@ -162,8 +161,13 @@ def ubah_status_reservasi():
         ).execute()
 
         r["status"] = status_baru
-        if status_baru in ("SELESAI", "DIBATALKAN") and r["kamar"] in data_kamar:
-            data_kamar[r["kamar"]]["status"] = "TERSEDIA"
+        if r["kamar"] in data_kamar:
+            if status_baru == "CHECK-IN":
+                data_kamar[r["kamar"]]["status"] = "TERISI"
+            elif status_baru in ("SELESAI", "DIBATALKAN"):
+                data_kamar[r["kamar"]]["status"] = "TERSEDIA"
+            else:
+                data_kamar[r["kamar"]]["status"] = "DIPESAN"
         simpan()
 
         print(f"\n>> Status reservasi {kode} berhasil diubah menjadi {status_baru}!")
@@ -207,3 +211,5 @@ def hapus_reservasi():
         print("\n>> Kode reservasi tidak ditemukan.")
     except PermissionError as e:
         print(f"\n>> Gagal! {e}")
+    finally:
+        input("Tekan enter untuk lanjut")

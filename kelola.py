@@ -2,11 +2,12 @@ import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
-from data import data_kamar, simpan
+from data import data_kamar, data_reservasi, simpan
 from rich.console import Console
 from rich.table import Table
 
 baris = ("=" * 60)
+STATUS_KAMAR = ("TERSEDIA", "DIPESAN", "TERISI", "PERBAIKAN")
 
 def tampilan_kelola_kamar():
     while True:
@@ -50,6 +51,10 @@ def tambah_kamar():
             raise ValueError("Semua data wajib diisi.")
         if nomor_kamar in data_kamar:
             raise KeyError(f"Nomor kamar {nomor_kamar} sudah terdaftar.")
+        if status_kamar not in STATUS_KAMAR:
+            raise ValueError("Status harus TERSEDIA, DIPESAN, TERISI, atau PERBAIKAN.")
+        if not harga_kamar.isdigit():
+            raise ValueError("Harga harus berupa angka.")
         harga = int(harga_kamar)
         if harga <= 0:
             raise ValueError("Harga harus lebih dari 0.")
@@ -86,9 +91,20 @@ def ubah_kamar():
         fasilitas = input(f"Fasilitas [{kamar['fasilitas']}]: ").strip().upper()
         harga = input(f"Harga [{kamar['harga']}]: ").strip()
         status = input(f"Status [{kamar['status']}]: ").strip().upper()
+        if harga and not harga.isdigit():
+            raise ValueError("Harga harus berupa angka.")
         harga_baru = int(harga) if harga else kamar["harga"]
         if harga_baru <= 0:
-            raise ValueError
+            raise ValueError("Harga harus lebih dari 0.")
+        if status and status not in STATUS_KAMAR:
+            raise ValueError("Status kamar tidak valid.")
+        aktif = any(
+            reservasi.get("kamar") == nomor
+            and reservasi.get("status") not in ("SELESAI", "DIBATALKAN")
+            for reservasi in data_reservasi.values()
+        )
+        if aktif and status and status != kamar["status"]:
+            raise PermissionError("Status kamar mengikuti status reservasi aktif.")
         kamar["tipe"] = tipe or kamar["tipe"]
         kamar["fasilitas"] = fasilitas or kamar["fasilitas"]
         kamar["harga"] = harga_baru
@@ -97,17 +113,16 @@ def ubah_kamar():
         print("\n>> Data kamar berhasil diubah!")
     except KeyError:
         print("\n>> Nomor kamar tidak ditemukan.")
-    except ValueError:
-        print("\n>> Harga harus berupa angka lebih dari 0.")
+    except ValueError as e:
+        print(f"\n>> {e}")
+    except PermissionError as e:
+        print(f"\n>> {e}")
     finally:
         input("\nTekan Enter untuk kembali...")
 
 console = Console()
 def tampilkan_kamar():
     os.system("cls")
-    print(baris)
-    print("DAFTAR KAMAR".center(60))
-    print(baris)
     try:
         if not data_kamar:
             raise LookupError("Data kamar masih kosong.")
@@ -144,8 +159,13 @@ def hapus_kamar():
     try:
         nomor = input("Masukkan nomor kamar yang dihapus: ").strip().upper()
         kamar = data_kamar[nomor]
-        if kamar["status"] == "TERISI":
-            raise PermissionError("Kamar masih terisi, tidak dapat dihapus.")
+        ada_reservasi_aktif = any(
+            reservasi.get("kamar") == nomor
+            and reservasi.get("status") not in ("SELESAI", "DIBATALKAN")
+            for reservasi in data_reservasi.values()
+        )
+        if ada_reservasi_aktif:
+            raise PermissionError("Kamar memiliki reservasi aktif, tidak dapat dihapus.")
         print(f"\nTipe      : {kamar['tipe']}")
         print(f"Fasilitas : {kamar['fasilitas']}")
         print(f"Harga     : {kamar['harga']}")

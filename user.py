@@ -38,7 +38,7 @@ def menu_user(username):
         elif pilihan == 6:
           user.reservasi_kamar(username)
         elif pilihan == 7:
-         user.ubah_profil(username)
+         username = user.ubah_profil(username)
         elif pilihan == 8:
             return
         else:

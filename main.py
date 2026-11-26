@@ -4,7 +4,6 @@ from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from autentikasi import admin,user, register
 from admin import menu_admin
-from colorama import Fore
 from user import menu_user
 import pwinput
 
@@ -60,7 +59,6 @@ def menu_utama():
                     register()
                 except ValueError as e:
                     input(str(e) + "\nTekan Enter untuk melanjutkan...")
-                    menu_utama()
                     
         elif pilihan == 4:
                 exit()

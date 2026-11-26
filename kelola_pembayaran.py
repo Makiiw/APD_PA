@@ -4,14 +4,10 @@ from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from rich.console import Console
 from data import data_reservasi, simpan
-from util import table as table_util
+from util import table as table_util, rupiah
 
 baris = ("=" * 60)
 console = Console()
-
-
-def rupiah(angka):
-    return f"Rp {angka:,}".replace(",", ".")
 
 
 def tampilan_kelola_pembayaran():

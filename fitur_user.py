@@ -1,12 +1,11 @@
 import os
+import data
 from rich.console import Console
+from rich.markup import escape
 from data import data_kamar, data_reservasi, user, data_pengumuman, simpan
 from util import table as table_util, rupiah
 from datetime import datetime
 from pwinput import pwinput
-from InquirerPy import inquirer
-from InquirerPy.base.control import Choice
-from InquirerPy.separator import Separator
 
 FORMAT_TANGGAL = "%d-%m-%Y"
 
@@ -30,9 +29,6 @@ def reset():
 
 def tampilkan_kamar():
     reset()
-    print(baris)
-    print("DAFTAR KAMAR".center(60))
-    print(baris)
     try:
         if not data_kamar:
             raise LookupError("Data kamar masih kosong.")
@@ -129,7 +125,7 @@ def riwayat_pembayaran(username):
         for (kode, info) in milik.items():
             total = info.get("total", 0)
             pembayaran = info.get("pembayaran", "BELUM LUNAS")
-            if pembayaran.upper() != "LUNAS":
+            if pembayaran.upper() != "LUNAS" and info.get("status") != "DIBATALKAN":
                 total_belum_lunas += total
 
             tabel.add_row(
@@ -173,7 +169,7 @@ def pengumuman_hotel():
             table.add_row(
                 str(i), 
                 p['tanggal'], 
-                p['isi'])
+                escape(p['isi']))
 
         console.print(table)
 
@@ -225,7 +221,6 @@ def reservasi_kamar(username):
 
             console.print(tabel)
             console.print(f"\nTotal Kamar Tersedia: {len(tersedia)}")
-            print(f"Total     : {rupiah(total)}")
 
             print(baris)
 
@@ -241,8 +236,10 @@ def reservasi_kamar(username):
 
             masuk = datetime.strptime(masuk, FORMAT_TANGGAL)
             keluar = datetime.strptime(keluar, FORMAT_TANGGAL)
+            if masuk.date() < datetime.now().date():
+                raise ArithmeticError("Tanggal check-in tidak boleh sebelum hari ini.")
             if keluar <= masuk:
-                raise ArithmeticError
+                raise ArithmeticError("Tanggal check-out harus setelah tanggal check-in.")
 
             malam = (keluar - masuk).days
             total = malam * kamar["harga"]
@@ -277,8 +274,8 @@ def reservasi_kamar(username):
             return
         except PermissionError:
             print("\n>> Kamar sedang tidak tersedia.")
-        except ArithmeticError:
-            print("\n>> Tanggal check-out harus setelah tanggal check-in.")
+        except ArithmeticError as e:
+            print(f"\n>> {e}")
         except ValueError:
             print("\n>> Format tanggal harus DD-MM-YYYY, contoh 20-11-2026.")
 
@@ -303,11 +300,13 @@ def ubah_profil(username):
 
             akun = next((a for a in user if a[0] == username), None)
             if akun is None:
-                raise KeyError("Akun tidak ditemukan.")
+                raise ValueError("Akun tidak ditemukan.")
             if pass_lama != akun[1]:
                 raise PermissionError("Password lama tidak sesuai.")
-            if user_baru and user_baru != username and any(a[0] == user_baru for a in user):
-                raise KeyError("Username sudah dipakai.")
+            if user_baru and user_baru != username and any(
+                akun[0] == user_baru for akun in data.admin + user
+            ):
+                raise ValueError("Username sudah dipakai")
 
             if pass_baru:
                 akun[1] = pass_baru

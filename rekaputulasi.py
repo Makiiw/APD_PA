@@ -2,17 +2,13 @@ import os
 from collections import Counter
 from rich.console import Console
 from data import data_kamar, data_tamu, data_reservasi
-from util import table as table_util
+from util import table as table_util, rupiah
 
 baris = ("=" * 60)
 console = Console()
 
 STATUS_KAMAR = ["TERSEDIA", "DIPESAN", "TERISI", "PERBAIKAN"]
 STATUS_RESERVASI = ["MENUNGGU KONFIRMASI", "DIKONFIRMASI", "CHECK-IN", "SELESAI", "DIBATALKAN"]
-
-
-def rupiah(angka):
-    return f"Rp {angka:,}".replace(",", ".")
 
 
 def rekaputulasi():
