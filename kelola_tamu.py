@@ -164,7 +164,7 @@ def hapus_tamu():
     print(baris)
     try:
         id_tamu = input("Masukkan ID tamu yang dihapus: ").strip().upper()
-        tamu = data_tamu[id_tamu]  # KeyError jika ID tidak ada
+        tamu = data_tamu[id_tamu]
         aktif = any(
             r.get("id_tamu") == id_tamu and r.get("status") not in ("SELESAI", "DIBATALKAN")
             for r in data_reservasi.values()
