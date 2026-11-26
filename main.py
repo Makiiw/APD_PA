@@ -5,7 +5,7 @@ from InquirerPy.separator import Separator
 from autentikasi import admin,user, register
 from admin import menu_admin
 from colorama import Fore
-from menu_user import menu_user
+from user import menu_user
 
 
 

@@ -6,7 +6,7 @@ from InquirerPy.separator import Separator
 from rich.console import Console
 from data import data_kamar, data_reservasi, user as data_user, simpan
 from util import table as table_util
-from user_module import buat_kode_reservasi
+from fitur_user import buat_kode_reservasi
 
 baris = ("=" * 60)
 console = Console()

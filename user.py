@@ -3,7 +3,7 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from prompt_toolkit import choice
-import user_module as user
+import fitur_user as user
 
 def menu_user(username):
     while True:
@@ -17,7 +17,6 @@ def menu_user(username):
             message= "PILIHAN MENU: ",
             choices=[
                     Choice(value=1, name="- Informasi Dan Fasilitas Kamar"),
-                    Choice(value=2, name="- Ketersediaan Kamar"),
                     Choice(value=3, name="- Detail Dan Status Reservasi"),
                     Choice(value=4, name ="- Informasi Dan Riwayat Pembayaran"),
                     Choice(value=5, name ="- Pengumuman Hotel"),
@@ -31,8 +30,6 @@ def menu_user(username):
 
         if pilihan == 1:
             user.tampilkan_kamar()
-        elif pilihan == 2:
-            user.kamar_tersedia()
         elif pilihan == 3:
             user.reservasi_saya(username)
         elif pilihan == 4:
