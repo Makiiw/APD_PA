@@ -2,7 +2,7 @@ import os
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
-from data import simpan, data_tamu
+from data import simpan, data_tamu, data_reservasi, user as data_user, cari_tamu
 from rich.console import Console
 from rich.table import Table
 console = Console()
@@ -44,6 +44,7 @@ def tambah_tamu():
             nama_tamu = input("Masukan Nama Tamu: ").strip().upper()
             no_hp = input("Masukan No HP: ").strip()
             alamat = input("Masukan Alamat: ").strip()
+            username = input("Username Akun (kosongkan jika tidak punya akun): ").strip()
             
             if "" in (id_tamu, nama_tamu, no_hp, alamat):
                 raise ValueError("Semua data wajib diisi.")
@@ -51,8 +52,14 @@ def tambah_tamu():
                 raise KeyError(f"ID tamu {id_tamu} sudah terdaftar.")
             if not no_hp.isdigit():
                 raise ValueError("No. HP harus berupa angka.")
+            if username:
+                if not any(akun[0] == username for akun in data_user):
+                    raise ValueError("Username tidak terdaftar sebagai akun.")
+                if cari_tamu(username)[1]:
+                    raise ValueError("Akun ini sudah punya data tamu.")
             data_tamu[id_tamu] = {
                 "ID TAMU": id_tamu,
+                "username": username,
                 "Nama": nama_tamu,
                 "NO. HP": no_hp,
                 "Alamat": alamat
@@ -81,9 +88,11 @@ def tampilkan_tamu():
         tabel = Table(title="Data Tamu Hotel", show_lines=True)
         tabel.add_column("No", justify="center")
         tabel.add_column("ID Tamu", justify="center")
+        tabel.add_column("Username")
         tabel.add_column("Nama")
         tabel.add_column("No. HP")
         tabel.add_column("Alamat")
+        tabel.add_column("Jml Reservasi", justify="center")
         
         nomor = 0
         dilewati = 0
@@ -96,7 +105,8 @@ def tampilkan_tamu():
                 dilewati += 1
                 continue
             nomor += 1
-            tabel.add_row(str(nomor), id_tamu, nama, hp, alamat)
+            jml = sum(1 for r in data_reservasi.values() if r.get("id_tamu") == id_tamu)
+            tabel.add_row(str(nomor), id_tamu, info.get("username") or "-", nama, hp, alamat, str(jml))
             
         console.print(tabel)
         console.print(f"\nTotal tamu: {nomor}")
@@ -155,6 +165,12 @@ def hapus_tamu():
     try:
         id_tamu = input("Masukkan ID tamu yang dihapus: ").strip().upper()
         tamu = data_tamu[id_tamu]  # KeyError jika ID tidak ada
+        aktif = any(
+            r.get("id_tamu") == id_tamu and r.get("status") not in ("SELESAI", "DIBATALKAN")
+            for r in data_reservasi.values()
+        )
+        if aktif:
+            raise PermissionError("Tamu masih punya reservasi aktif, tidak dapat dihapus.")
 
         print(f"\nNama   : {tamu['Nama']}")
         print(f"No. HP : {tamu['NO. HP']}")
@@ -170,5 +186,7 @@ def hapus_tamu():
 
     except KeyError:
         print("\n>> ID tamu tidak ditemukan.")
+    except PermissionError as e:
+        print(f"\n>> Gagal! {e}")
     finally:
         input("\nTekan Enter untuk kembali...")

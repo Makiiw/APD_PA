@@ -2,7 +2,7 @@ import os
 import data
 from rich.console import Console
 from rich.markup import escape
-from data import data_kamar, data_reservasi, user, data_pengumuman, simpan
+from data import data_kamar, data_reservasi, user, data_pengumuman, data_tamu, buat_profil_tamu, simpan
 from util import table as table_util, rupiah
 from datetime import datetime
 from pwinput import pwinput
@@ -184,6 +184,16 @@ def pengumuman_hotel():
 
 
 def reservasi_kamar(username):
+    id_tamu = buat_profil_tamu(username)
+    tamu = data_tamu[id_tamu]
+    if not str(tamu.get("NO. HP", "")).strip() or not str(tamu.get("Alamat", "")).strip():
+        reset()
+        print(baris)
+        print("RESERVASI KAMAR".center(60))
+        print(baris)
+        print("\n>> Lengkapi data diri (No. HP & Alamat) di menu 'Ubah Data Diri' dulu.")
+        input("\nTekan Enter untuk kembali...")
+        return
 
     while True:
         reset()
@@ -247,6 +257,7 @@ def reservasi_kamar(username):
 
             data_reservasi[kode] = {
                 "username": username,
+                "id_tamu": id_tamu,
                 "kamar": nomor,
                 "checkin": masuk.strftime(FORMAT_TANGGAL),
                 "checkout": keluar.strftime(FORMAT_TANGGAL),
@@ -297,6 +308,9 @@ def ubah_profil(username):
             user_baru = input("Username baru        : ").strip()
             pass_lama = pwinput("Password lama        : ")
             pass_baru = pwinput("Password baru        : ")
+            nama_baru = input("Nama lengkap        : ").strip().upper()
+            hp_baru = input("No. HP              : ").strip()
+            alamat_baru = input("Alamat              : ").strip()
 
             akun = next((a for a in user if a[0] == username), None)
             if akun is None:
@@ -307,11 +321,20 @@ def ubah_profil(username):
                 akun[0] == user_baru for akun in data.admin + user
             ):
                 raise ValueError("Username sudah dipakai")
+            if hp_baru and not hp_baru.isdigit():
+                raise ValueError("No. HP harus berupa angka.")
+
+            id_tamu = buat_profil_tamu(username)
+            tamu = data_tamu[id_tamu]
+            tamu["Nama"] = nama_baru or tamu["Nama"]
+            tamu["NO. HP"] = hp_baru or tamu["NO. HP"]
+            tamu["Alamat"] = alamat_baru or tamu["Alamat"]
 
             if pass_baru:
                 akun[1] = pass_baru
             if user_baru and user_baru != username:
                 akun[0] = user_baru
+                tamu["username"] = user_baru
                 for r in data_reservasi.values():
                     if r.get("username") == username:
                         r["username"] = user_baru

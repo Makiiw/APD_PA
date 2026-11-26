@@ -96,6 +96,11 @@
             "tset",
             "tset",
             "User"
+        ],
+        [
+            "mantap",
+            "mantap123",
+            "User"
         ]
     ],
     "data_kamar": {
@@ -163,7 +168,7 @@
             "tipe": "SUITE",
             "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB, RUANG TAMU",
             "harga": 1000000,
-            "status": "TERSEDIA"
+            "status": "DIPESAN"
         },
         "302": {
             "tipe": "SUITE",
@@ -183,28 +188,146 @@
             "ID TAMU": "1",
             "Nama": "FALIH",
             "NO. HP": 222,
-            "Alamat": "PP"
+            "Alamat": "PP",
+            "username": "falih"
         },
         "23": {
             "ID TAMU": "23",
             "Nama": "ILYAS",
             "NO. HP": 899,
             "Alamat": "gg"
+        },
+        "24": {
+            "ID TAMU": "24",
+            "username": "user",
+            "Nama": "RAPIP",
+            "NO. HP": "0899",
+            "Alamat": "msaid"
+        },
+        "25": {
+            "ID TAMU": "25",
+            "username": "budi",
+            "Nama": "BUDI",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "26": {
+            "ID TAMU": "26",
+            "username": "siti",
+            "Nama": "SITI",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "27": {
+            "ID TAMU": "27",
+            "username": "andi",
+            "Nama": "ANDI",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "28": {
+            "ID TAMU": "28",
+            "username": "dewi",
+            "Nama": "DEWI",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "29": {
+            "ID TAMU": "29",
+            "username": "rizky",
+            "Nama": "RIZKY",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "30": {
+            "ID TAMU": "30",
+            "username": "nadia",
+            "Nama": "NADIA",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "31": {
+            "ID TAMU": "31",
+            "username": "fajar",
+            "Nama": "FAJAR",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "32": {
+            "ID TAMU": "32",
+            "username": "putri",
+            "Nama": "PUTRI",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "33": {
+            "ID TAMU": "33",
+            "username": "dimas",
+            "Nama": "DIMAS",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "34": {
+            "ID TAMU": "34",
+            "username": "ayu",
+            "Nama": "AYU",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "35": {
+            "ID TAMU": "35",
+            "username": "bayu",
+            "Nama": "BAYU",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "36": {
+            "ID TAMU": "36",
+            "username": "citra",
+            "Nama": "CITRA",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "37": {
+            "ID TAMU": "37",
+            "username": "eko",
+            "Nama": "EKO",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "38": {
+            "ID TAMU": "38",
+            "username": "faliy",
+            "Nama": "FALIY",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "39": {
+            "ID TAMU": "39",
+            "username": "test",
+            "Nama": "TEST",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "40": {
+            "ID TAMU": "40",
+            "username": "tset",
+            "Nama": "TSET",
+            "NO. HP": "",
+            "Alamat": ""
+        },
+        "41": {
+            "ID TAMU": "41",
+            "username": "mantap",
+            "Nama": "ILYAS",
+            "NO. HP": "0859",
+            "Alamat": "ggs"
         }
     },
     "data_reservasi": {
-        "RSV-001": {
-            "username": "user",
-            "kamar": "303",
-            "checkin": "28-11-2026",
-            "checkout": "30-11-2026",
-            "malam": 2,
-            "total": 4000000,
-            "status": "SELESAI",
-            "pembayaran": "LUNAS"
-        },
         "RSV-002": {
             "username": "user",
+            "id_tamu": "24",
             "kamar": "101",
             "checkin": "28-11-2026",
             "checkout": "30-11-2026",
@@ -215,11 +338,23 @@
         },
         "RSV-003": {
             "username": "user",
+            "id_tamu": "24",
             "kamar": "102",
             "checkin": "29-11-2026",
             "checkout": "30-11-2026",
             "malam": 1,
             "total": 250000,
+            "status": "MENUNGGU KONFIRMASI",
+            "pembayaran": "BELUM LUNAS"
+        },
+        "RSV-004": {
+            "username": "user",
+            "id_tamu": "24",
+            "kamar": "301",
+            "checkin": "27-11-2026",
+            "checkout": "28-11-2026",
+            "malam": 1,
+            "total": 1000000,
             "status": "MENUNGGU KONFIRMASI",
             "pembayaran": "BELUM LUNAS"
         }
