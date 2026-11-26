@@ -4,7 +4,7 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from rich.console import Console
-from data import data_kamar, data_reservasi, user as data_user, simpan
+from data import data_kamar, data_reservasi, data_tamu, user as data_user, cari_tamu, simpan
 from util import table as table_util
 from fitur_user import buat_kode_reservasi
 
@@ -64,6 +64,9 @@ def tambah_reservasi():
 
         if not any(akun[0] == username for akun in data_user):
             raise ValueError("Username tamu tidak terdaftar.")
+        id_tamu, tamu = cari_tamu(username)
+        if not tamu:
+            raise ValueError("Tamu belum punya data tamu. Tambahkan dulu di Kelola Data Tamu.")
         kamar = data_kamar[nomor]
         if kamar["status"].upper() != "TERSEDIA":
             raise PermissionError(f"Kamar {nomor} sedang tidak tersedia.")
@@ -78,6 +81,7 @@ def tambah_reservasi():
 
         data_reservasi[kode] = {
             "username": username,
+            "id_tamu": id_tamu,
             "kamar": nomor,
             "checkin": masuk.strftime(FORMAT_TANGGAL),
             "checkout": keluar.strftime(FORMAT_TANGGAL),
@@ -111,6 +115,7 @@ def tampilkan_reservasi():
         tabel = table_util("Data Reservasi Hotel")
         tabel.add_column("Kode")
         tabel.add_column("Username")
+        tabel.add_column("Nama Tamu")
         tabel.add_column("No. Kamar", justify="center")
         tabel.add_column("Check-in", justify="center")
         tabel.add_column("Check-out", justify="center")
@@ -121,7 +126,7 @@ def tampilkan_reservasi():
 
         for kode, r in data_reservasi.items():
             total = f"Rp {r['total']:,}".replace(",", ".")
-            tabel.add_row(kode, r["username"], r["kamar"], r["checkin"], r["checkout"],
+            tabel.add_row(kode, r["username"], data_tamu.get(r.get("id_tamu"), {}).get("Nama", "-"), r["kamar"], r["checkin"], r["checkout"],
                           str(r["malam"]), total,
                           r.get("status", "MENUNGGU KONFIRMASI"),
                           r.get("pembayaran", "BELUM LUNAS"))

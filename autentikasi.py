@@ -59,5 +59,6 @@ def register():
         if akun[0] == username_baru:
             raise ValueError("Username sudah digunakan, Silahkan gunakan username lain!")
     data.user.append([username_baru, password_baru, "User"])
+    data.buat_profil_tamu(username_baru)
     data.simpan()
     input("Register berhasil! Tekan Enter untuk melanjutkan...")
