@@ -8,6 +8,7 @@ from rich.table import Table
 
 baris = ("=" * 60)
 STATUS_KAMAR = ("TERSEDIA", "DIPESAN", "TERISI", "PERBAIKAN")
+STATUS_MANUAL = ("TERSEDIA", "PERBAIKAN")
 
 def tampilan_kelola_kamar():
     while True:
@@ -51,8 +52,8 @@ def tambah_kamar():
             raise ValueError("Semua data wajib diisi.")
         if nomor_kamar in data_kamar:
             raise KeyError(f"Nomor kamar {nomor_kamar} sudah terdaftar.")
-        if status_kamar not in STATUS_KAMAR:
-            raise ValueError("Status harus TERSEDIA, DIPESAN, TERISI, atau PERBAIKAN.")
+        if status_kamar not in STATUS_MANUAL:
+            raise ValueError("Status awal harus TERSEDIA atau PERBAIKAN (DIPESAN/TERISI mengikuti reservasi).")
         if not harga_kamar.isdigit():
             raise ValueError("Harga harus berupa angka.")
         harga = int(harga_kamar)
@@ -96,8 +97,8 @@ def ubah_kamar():
         harga_baru = int(harga) if harga else kamar["harga"]
         if harga_baru <= 0:
             raise ValueError("Harga harus lebih dari 0.")
-        if status and status not in STATUS_KAMAR:
-            raise ValueError("Status kamar tidak valid.")
+        if status and status != kamar["status"] and status not in STATUS_MANUAL:
+            raise ValueError("Status hanya boleh TERSEDIA atau PERBAIKAN (DIPESAN/TERISI mengikuti reservasi).")
         aktif = any(
             reservasi.get("kamar") == nomor
             and reservasi.get("status") not in ("SELESAI", "DIBATALKAN")

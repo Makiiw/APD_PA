@@ -25,7 +25,7 @@ def menu_admin():
                         Choice(value = 2, name = "[2] Kelola Data Tamu"),
                         Choice(value = 3, name = "[3] Kelola Reservasi"),
                         Choice(value = 4, name = "[4] Kelola Pembayaran"),
-                        Choice(value = 5, name = "[5] Rekaputulasi"),
+                        Choice(value = 5, name = "[5] Rekapitulasi"),
                         Choice(value = 6, name = "[6] Kelola Pengumuman"),
                         Choice(value = 7, name = "[7] Balik Ke Menu Utama"),
                         Separator(baris)

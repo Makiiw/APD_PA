@@ -5,6 +5,7 @@ from InquirerPy.separator import Separator
 from data import simpan, data_tamu, data_reservasi, user as data_user, cari_tamu
 from rich.console import Console
 from rich.table import Table
+from rich.markup import escape
 console = Console()
 baris = ("=" * 60)
 
@@ -50,6 +51,8 @@ def tambah_tamu():
                 raise ValueError("Semua data wajib diisi.")
             if id_tamu in data_tamu:
                 raise KeyError(f"ID tamu {id_tamu} sudah terdaftar.")
+            if any(r.get("id_tamu") == id_tamu for r in data_reservasi.values()):
+                raise KeyError(f"ID tamu {id_tamu} pernah dipakai di data reservasi, gunakan ID lain.")
             if not no_hp.isdigit():
                 raise ValueError("No. HP harus berupa angka.")
             if username:
@@ -106,7 +109,7 @@ def tampilkan_tamu():
                 continue
             nomor += 1
             jml = sum(1 for r in data_reservasi.values() if r.get("id_tamu") == id_tamu)
-            tabel.add_row(str(nomor), id_tamu, info.get("username") or "-", nama, hp, alamat, str(jml))
+            tabel.add_row(str(nomor), escape(id_tamu), escape(info.get("username") or "-"), escape(nama), escape(hp), escape(alamat), str(jml))
             
         console.print(tabel)
         console.print(f"\nTotal tamu: {nomor}")
@@ -164,7 +167,7 @@ def hapus_tamu():
     print(baris)
     try:
         id_tamu = input("Masukkan ID tamu yang dihapus: ").strip().upper()
-        tamu = data_tamu[id_tamu]
+        tamu = data_tamu[id_tamu]  # KeyError jika ID tidak ada
         aktif = any(
             r.get("id_tamu") == id_tamu and r.get("status") not in ("SELESAI", "DIBATALKAN")
             for r in data_reservasi.values()

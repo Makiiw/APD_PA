@@ -2,7 +2,7 @@ import os
 import data
 from rich.console import Console
 from rich.markup import escape
-from data import data_kamar, data_reservasi, user, data_pengumuman, data_tamu, buat_profil_tamu, simpan
+from data import data_kamar, data_reservasi, user, data_pengumuman, data_tamu, buat_profil_tamu, profil_lengkap, kamar_bentrok, sinkron_status_kamar, simpan
 from util import table as table_util, rupiah
 from datetime import datetime
 from pwinput import pwinput
@@ -186,7 +186,7 @@ def pengumuman_hotel():
 def reservasi_kamar(username):
     id_tamu = buat_profil_tamu(username)
     tamu = data_tamu[id_tamu]
-    if not str(tamu.get("NO. HP", "")).strip() or not str(tamu.get("Alamat", "")).strip():
+    if not profil_lengkap(tamu):
         reset()
         print(baris)
         print("RESERVASI KAMAR".center(60))
@@ -208,29 +208,32 @@ def reservasi_kamar(username):
             
             tersedia = {
                 nomor: info for nomor, info in data_kamar.items() 
-                if info["status"].lower() == "tersedia"
+                if info["status"].lower() != "perbaikan"
             }
 
             if not tersedia:
-                raise LookupError("Tidak ada kamar yang tersedia saat ini.")
+                raise LookupError("Tidak ada kamar yang dapat dipesan saat ini.")
 
 
-            tabel = table_util("Kamar Yang Tersedia")
+            tabel = table_util("Kamar Yang Dapat Dipesan")
             tabel.add_column("No", justify="center")
             tabel.add_column("No. Kamar", justify="center")
             tabel.add_column("Tipe")
             tabel.add_column("Harga/Malam", justify="right")
+            tabel.add_column("Status Saat Ini", justify="center")
 
             for no, (nomor, info) in enumerate(tersedia.items(), start=1):
                 tabel.add_row(
                     str(no),
                     nomor,
                     info["tipe"],
-                    rupiah(info["harga"])
+                    rupiah(info["harga"]),
+                    info["status"]
                 )
 
             console.print(tabel)
-            console.print(f"\nTotal Kamar Tersedia: {len(tersedia)}")
+            console.print(f"\nTotal Kamar: {len(tersedia)}")
+            console.print("Kamar DIPESAN/TERISI tetap bisa dipesan untuk tanggal yang tidak bentrok.")
 
             print(baris)
 
@@ -241,8 +244,8 @@ def reservasi_kamar(username):
             keluar = input("Tanggal Check-out : ").strip()
 
 
-            if kamar["status"].lower() != "tersedia":
-                raise PermissionError
+            if kamar["status"].upper() == "PERBAIKAN":
+                raise PermissionError("Kamar sedang dalam perbaikan.")
 
             masuk = datetime.strptime(masuk, FORMAT_TANGGAL)
             keluar = datetime.strptime(keluar, FORMAT_TANGGAL)
@@ -250,6 +253,8 @@ def reservasi_kamar(username):
                 raise ArithmeticError("Tanggal check-in tidak boleh sebelum hari ini.")
             if keluar <= masuk:
                 raise ArithmeticError("Tanggal check-out harus setelah tanggal check-in.")
+            if kamar_bentrok(nomor, masuk, keluar):
+                raise PermissionError("Kamar sudah dipesan pada tanggal tersebut.")
 
             malam = (keluar - masuk).days
             total = malam * kamar["harga"]
@@ -266,7 +271,7 @@ def reservasi_kamar(username):
                 "status": "MENUNGGU KONFIRMASI",
                 "pembayaran": "BELUM LUNAS",
             }
-            kamar["status"] = "DIPESAN"
+            sinkron_status_kamar(nomor)
             simpan()
 
             print(f"\nKamar     : {nomor} ({kamar['tipe']})")
@@ -283,8 +288,8 @@ def reservasi_kamar(username):
             print(f"\n>> {e}")
             input("\nTekan Enter untuk kembali...")
             return
-        except PermissionError:
-            print("\n>> Kamar sedang tidak tersedia.")
+        except PermissionError as e:
+            print(f"\n>> {e}")
         except ArithmeticError as e:
             print(f"\n>> {e}")
         except ValueError:

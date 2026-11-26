@@ -4,7 +4,8 @@ from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from rich.console import Console
-from data import data_kamar, data_reservasi, data_tamu, user as data_user, cari_tamu, simpan
+from rich.markup import escape
+from data import data_kamar, data_reservasi, data_tamu, user as data_user, cari_tamu, profil_lengkap, kamar_bentrok, sinkron_status_kamar, simpan
 from util import table as table_util
 from fitur_user import buat_kode_reservasi
 
@@ -67,13 +68,17 @@ def tambah_reservasi():
         id_tamu, tamu = cari_tamu(username)
         if not tamu:
             raise ValueError("Tamu belum punya data tamu. Tambahkan dulu di Kelola Data Tamu.")
+        if not profil_lengkap(tamu):
+            raise ValueError("Data tamu belum lengkap (No. HP & Alamat). Lengkapi dulu di Kelola Data Tamu.")
         kamar = data_kamar[nomor]
-        if kamar["status"].upper() != "TERSEDIA":
-            raise PermissionError(f"Kamar {nomor} sedang tidak tersedia.")
+        if kamar["status"].upper() == "PERBAIKAN":
+            raise PermissionError(f"Kamar {nomor} sedang dalam perbaikan.")
         if masuk.date() < datetime.now().date():
             raise ValueError("Tanggal check-in tidak boleh sebelum hari ini.")
         if keluar <= masuk:
             raise ValueError("Tanggal check-out harus setelah tanggal check-in.")
+        if kamar_bentrok(nomor, masuk, keluar):
+            raise PermissionError(f"Kamar {nomor} sudah dipesan pada tanggal tersebut.")
 
         malam = (keluar - masuk).days
         total = malam * kamar["harga"]
@@ -90,7 +95,7 @@ def tambah_reservasi():
             "status": "DIKONFIRMASI",
             "pembayaran": "BELUM LUNAS",
         }
-        kamar["status"] = "DIPESAN"
+        sinkron_status_kamar(nomor)
         simpan()
 
         print(f"\nKamar     : {nomor} ({kamar['tipe']})")
@@ -126,7 +131,7 @@ def tampilkan_reservasi():
 
         for kode, r in data_reservasi.items():
             total = f"Rp {r['total']:,}".replace(",", ".")
-            tabel.add_row(kode, r["username"], data_tamu.get(r.get("id_tamu"), {}).get("Nama", "-"), r["kamar"], r["checkin"], r["checkout"],
+            tabel.add_row(kode, escape(r["username"]), escape(data_tamu.get(r.get("id_tamu"), {}).get("Nama", "-")), r["kamar"], r["checkin"], r["checkout"],
                           str(r["malam"]), total,
                           r.get("status", "MENUNGGU KONFIRMASI"),
                           r.get("pembayaran", "BELUM LUNAS"))
@@ -152,27 +157,33 @@ def ubah_status_reservasi():
         r = data_reservasi[kode]
 
         status_lama = r.get("status", "MENUNGGU KONFIRMASI")
+        pembayaran = r.get("pembayaran", "BELUM LUNAS")
         tujuan = ALUR.get(status_lama, [])
         if not tujuan:
             raise PermissionError(f"Reservasi berstatus {status_lama}, tidak dapat diubah lagi.")
+        if pembayaran != "LUNAS":
+            tujuan = [s for s in tujuan if s not in ("CHECK-IN", "SELESAI")]
+            if not tujuan:
+                raise PermissionError("Pembayaran belum LUNAS, selesaikan pembayaran dulu.")
 
         print(f"\nTamu            : {r['username']}")
         print(f"Kamar           : {r['kamar']}")
-        print(f"Status saat ini : {status_lama}\n")
+        print(f"Status saat ini : {status_lama}")
+        print(f"Pembayaran      : {pembayaran}\n")
 
         status_baru = inquirer.select(
             message="Ubah status menjadi: ",
             choices=tujuan
         ).execute()
 
+        if status_baru == "CHECK-IN" and any(
+            x.get("kamar") == r["kamar"] and x.get("status") == "CHECK-IN"
+            for x in data_reservasi.values()
+        ):
+            raise PermissionError("Kamar masih ditempati tamu lain, selesaikan check-out dulu.")
+
         r["status"] = status_baru
-        if r["kamar"] in data_kamar:
-            if status_baru == "CHECK-IN":
-                data_kamar[r["kamar"]]["status"] = "TERISI"
-            elif status_baru in ("SELESAI", "DIBATALKAN"):
-                data_kamar[r["kamar"]]["status"] = "TERSEDIA"
-            else:
-                data_kamar[r["kamar"]]["status"] = "DIPESAN"
+        sinkron_status_kamar(r["kamar"])
         simpan()
 
         print(f"\n>> Status reservasi {kode} berhasil diubah menjadi {status_baru}!")
@@ -205,9 +216,8 @@ def hapus_reservasi():
 
         konfirmasi = input("\nYakin ingin menghapus? (y/n): ").strip().lower()
         if konfirmasi == "y":
-            if status not in ("SELESAI", "DIBATALKAN") and r["kamar"] in data_kamar:
-                data_kamar[r["kamar"]]["status"] = "TERSEDIA"
             del data_reservasi[kode]
+            sinkron_status_kamar(r["kamar"])
             simpan()
             print("\n>> Data reservasi berhasil dihapus!")
         else:

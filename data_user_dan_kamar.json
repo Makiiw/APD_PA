@@ -96,11 +96,6 @@
             "tset",
             "tset",
             "User"
-        ],
-        [
-            "mantap",
-            "mantap123",
-            "User"
         ]
     ],
     "data_kamar": {
@@ -114,7 +109,7 @@
             "tipe": "STANDARD",
             "fasilitas": "AC, TV, WIFI",
             "harga": 250000,
-            "status": "DIPESAN"
+            "status": "TERISI"
         },
         "103": {
             "tipe": "PREMIUM",
@@ -168,7 +163,7 @@
             "tipe": "SUITE",
             "fasilitas": "AC, SMART TV, WIFI, KULKAS, BATHTUB, RUANG TAMU",
             "harga": 1000000,
-            "status": "DIPESAN"
+            "status": "TERSEDIA"
         },
         "302": {
             "tipe": "SUITE",
@@ -201,8 +196,8 @@
             "ID TAMU": "24",
             "username": "user",
             "Nama": "RAPIP",
-            "NO. HP": "0899",
-            "Alamat": "msaid"
+            "NO. HP": "08213",
+            "Alamat": "asd"
         },
         "25": {
             "ID TAMU": "25",
@@ -315,16 +310,20 @@
             "Nama": "TSET",
             "NO. HP": "",
             "Alamat": ""
-        },
-        "41": {
-            "ID TAMU": "41",
-            "username": "mantap",
-            "Nama": "ILYAS",
-            "NO. HP": "0859",
-            "Alamat": "ggs"
         }
     },
     "data_reservasi": {
+        "RSV-001": {
+            "username": "user",
+            "id_tamu": "24",
+            "kamar": "303",
+            "checkin": "28-11-2026",
+            "checkout": "30-11-2026",
+            "malam": 2,
+            "total": 4000000,
+            "status": "SELESAI",
+            "pembayaran": "LUNAS"
+        },
         "RSV-002": {
             "username": "user",
             "id_tamu": "24",
@@ -344,20 +343,10 @@
             "checkout": "30-11-2026",
             "malam": 1,
             "total": 250000,
-            "status": "MENUNGGU KONFIRMASI",
-            "pembayaran": "BELUM LUNAS"
-        },
-        "RSV-004": {
-            "username": "user",
-            "id_tamu": "24",
-            "kamar": "301",
-            "checkin": "27-11-2026",
-            "checkout": "28-11-2026",
-            "malam": 1,
-            "total": 1000000,
-            "status": "MENUNGGU KONFIRMASI",
-            "pembayaran": "BELUM LUNAS"
+            "status": "CHECK-IN",
+            "pembayaran": "LUNAS"
         }
     },
-    "data_pengumuman": []
+    "data_pengumuman": [],
+    "id_tamu_terakhir": 40
 }
