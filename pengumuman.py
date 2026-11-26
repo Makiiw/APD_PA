@@ -20,11 +20,11 @@ def tampilan_kelola_pengumuman():
         pilihan = inquirer.select(
             message="PILIHAN KELOLA PENGUMUMAN: ",
             choices=[
-                Choice(value=1, name="Buat Pengumuman"),
-                Choice(value=2, name="Tampil Data Pengumuman"),
-                Choice(value=3, name="Ubah Pengumuman"),
-                Choice(value=4, name="Hapus Pengumuman"),
-                Choice(value=5, name="Kembali Ke Menu Admin"),
+                Choice(value=1, name="[1] Buat Pengumuman"),
+                Choice(value=2, name="[2] Tampil Data Pengumuman"),
+                Choice(value=3, name="[3] Ubah Pengumuman"),
+                Choice(value=4, name="[4] Hapus Pengumuman"),
+                Choice(value=5, name="[5] Kembali Ke Menu Admin"),
                 Separator(baris)
             ]
         ).execute()
