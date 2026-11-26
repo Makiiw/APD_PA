@@ -16,12 +16,12 @@ def menu_user(username):
             message= "PILIHAN MENU: ",
             choices=[
                     Choice(value=1, name="- Informasi Dan Fasilitas Kamar"),
-                    Choice(value=3, name="- Detail Dan Status Reservasi"),
-                    Choice(value=4, name ="- Informasi Dan Riwayat Pembayaran"),
-                    Choice(value=5, name ="- Pengumuman Hotel"),
-                    Choice(value=6, name ="- Reservasi Kamar"),
-                    Choice(value=7, name ="- ubah Data Diri"),
-                    Choice(value=8, name ="- logout"),
+                    Choice(value=2, name="- Detail Dan Status Reservasi"),
+                    Choice(value=3, name ="- Informasi Dan Riwayat Pembayaran"),
+                    Choice(value=4, name ="- Pengumuman Hotel"),
+                    Choice(value=5, name ="- Reservasi Kamar"),
+                    Choice(value=6, name ="- ubah Data Diri"),
+                    Choice(value=7, name ="- logout"),
                     Separator(baris),
                 ],
         ).execute()
@@ -29,17 +29,17 @@ def menu_user(username):
 
         if pilihan == 1:
             user.tampilkan_kamar()
-        elif pilihan == 3:
+        elif pilihan == 2:
             user.reservasi_saya(username)
-        elif pilihan == 4:
+        elif pilihan == 3:
             user.riwayat_pembayaran(username)
-        elif pilihan == 5:
+        elif pilihan == 4:
            user.pengumuman_hotel()
-        elif pilihan == 6:
+        elif pilihan == 5:
           user.reservasi_kamar(username)
-        elif pilihan == 7:
+        elif pilihan == 6:
          username = user.ubah_profil(username)
-        elif pilihan == 8:
+        elif pilihan == 7:
             return
         else:
             print ("Pilihan Tidak Valid. Masukkan Angka 1-8.".center(60))

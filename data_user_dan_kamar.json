@@ -96,6 +96,11 @@
             "tset",
             "tset",
             "User"
+        ],
+        [
+            "se",
+            "es",
+            "User"
         ]
     ],
     "data_kamar": {
@@ -157,7 +162,7 @@
             "tipe": "FAMILY",
             "fasilitas": "AC, TV, WIFI, KULKAS, 2 KASUR",
             "harga": 750000,
-            "status": "TERSEDIA"
+            "status": "DIPESAN"
         },
         "301": {
             "tipe": "SUITE",
@@ -310,6 +315,13 @@
             "Nama": "TSET",
             "NO. HP": "",
             "Alamat": ""
+        },
+        "41": {
+            "ID TAMU": "41",
+            "username": "se",
+            "Nama": "SE",
+            "NO. HP": "",
+            "Alamat": ""
         }
     },
     "data_reservasi": {
@@ -345,8 +357,19 @@
             "total": 250000,
             "status": "CHECK-IN",
             "pembayaran": "LUNAS"
+        },
+        "RSV-004": {
+            "username": "user",
+            "id_tamu": "24",
+            "kamar": "205",
+            "checkin": "27-11-2026",
+            "checkout": "28-11-2026",
+            "malam": 1,
+            "total": 750000,
+            "status": "MENUNGGU KONFIRMASI",
+            "pembayaran": "BELUM LUNAS"
         }
     },
     "data_pengumuman": [],
-    "id_tamu_terakhir": 40
+    "id_tamu_terakhir": 41
 }
